@@ -24,6 +24,9 @@
 */
 
 #include <stdio.h>
+#ifdef _WIN32
+#include <stdlib.h>
+#endif
 #include <string.h>
 #include <noftypes.h>
 #include <bitmap.h>

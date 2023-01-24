@@ -12,10 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifdef _WIN32
+#include <FreeRTOS.h>
+#include <timers.h>
+#include <task.h>
+#include <queue.h>
+#else
 #include <freertos/FreeRTOS.h>
 #include <freertos/timers.h>
 #include <freertos/task.h>
 #include <freertos/queue.h>
+#endif
 //Nes stuff wants to define this as well...
 #undef false
 #undef true
@@ -35,8 +42,10 @@
 #include <components/nofrendo/nes/nesinput.h>
 #include <osd.h>
 #include <stdint.h>
+#ifndef _WIN32
 #include "driver/i2s.h"
 #include "sdkconfig.h"
+#endif
 #include "lcd.h"
 
 #include "psxcontroller.h"
@@ -328,7 +337,11 @@ int osd_init()
 	LCD_Init();
 	LCD_Display(0,0,320,240,NULL);
 	vidQueue=xQueueCreate(1, sizeof(bitmap_t *));
+#ifdef _WIN32
+	xTaskCreate(&videoTask, "videoTask", 2048, NULL, 5, NULL);
+#else
 	xTaskCreatePinnedToCore(&videoTask, "videoTask", 2048, NULL, 5, NULL, 1);
+#endif
 	osd_initinput();
 	return 0;
 }

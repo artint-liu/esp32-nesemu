@@ -13,16 +13,25 @@
 // limitations under the License.
 
 #include <stdio.h>
+#ifdef _WIN32
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "queue.h"
+#else
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "freertos/queue.h"
+#endif
 
 
+#ifndef _WIN32
 #include "driver/gpio.h"
 #include "soc/gpio_struct.h"
 #include "psxcontroller.h"
 #include "sdkconfig.h"
+#endif
 
 #define PSX_CLK CONFIG_HW_PSX_CLK
 #define PSX_DAT CONFIG_HW_PSX_DAT

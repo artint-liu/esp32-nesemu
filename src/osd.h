@@ -40,7 +40,7 @@
 #define  PATH_SEP    '/'
 #endif /* !__DJGPP__ */
 
-#elif defined(WIN32)
+#elif defined(_WIN32)
 #define  __PACKED__
 #define  PATH_SEP    '\\'
 #else /* !defined(WIN32) && !__GNUC__ */
@@ -48,9 +48,13 @@
 #define  PATH_SEP    ':'
 #endif /* !defined(WIN32) && !__GNUC__ */
 
-#if !defined(WIN32) && !defined(__DJGPP__)
+#if !defined(_WIN32) && !defined(__DJGPP__)
 #define stricmp strcasecmp
 #endif /* !WIN32 && !__DJGPP__ */
+
+#ifdef _WIN32
+#define stricmp _stricmp
+#endif
 
 
 extern void osd_setsound(void (*playfunc)(void *buffer, int size));
@@ -86,7 +90,7 @@ extern int osd_installtimer(int frequency, void *func, int funcsize,
 
 /* filename manipulation */
 extern void osd_fullname(char *fullname, const char *shortname);
-extern char *osd_newextension(char *string, char *ext);
+extern char *osd_newextension(char *string, const char *ext);
 
 /* input */
 extern void osd_getinput(void);

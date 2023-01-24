@@ -47,7 +47,7 @@ typedef struct
 typedef struct mapintf_s
 {
    int number;
-   char *name;
+   const char *name;
    void (*init)(void);
    void (*vblank)(void);
    void (*hblank)(int vblank);
@@ -62,7 +62,7 @@ typedef struct mapintf_s
 #include <components/nofrendo/nes/nes_rom.h>
 typedef struct mmc_s
 {
-   mapintf_t *intf;
+   const mapintf_t *intf;
    rominfo_t *cart;  /* link it back to the cart */
 } mmc_t;
 

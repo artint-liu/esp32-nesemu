@@ -36,8 +36,11 @@
 #include <gui.h>
 #include <log.h>
 #include <osd.h>
+#ifdef _WIN32
+#include <stdlib.h>
+#endif
 
-extern char *osd_getromdata();
+extern const unsigned char *osd_getromdata();
 
 /* Max length for displayed filename */
 #define  ROM_DISP_MAXLEN   20

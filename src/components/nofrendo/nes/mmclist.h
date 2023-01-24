@@ -28,7 +28,8 @@
 
 #include <components/nofrendo/nes/nes_mmc.h>
 
-extern mapintf_t *mappers[];
+//extern mapintf_t *mappers[];
+const mapintf_t** GetMappers();
 
 #endif /* !_MMCLIST_H_ */
 

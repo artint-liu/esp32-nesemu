@@ -15,11 +15,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _WIN32
 #include <sys/time.h>
+#endif
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifndef _WIN32
 #include <unistd.h>
-       
+#endif
+
 #include <noftypes.h>
 #include <nofconfig.h>
 #include <log.h>
@@ -45,7 +49,7 @@ void osd_fullname(char *fullname, const char *shortname)
 }
 
 /* This gives filenames for storage of saves */
-char *osd_newextension(char *string, char *ext)
+char *osd_newextension(char *string, const char *ext)
 {
    return string;
 }

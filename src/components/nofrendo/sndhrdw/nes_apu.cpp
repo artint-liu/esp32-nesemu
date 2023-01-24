@@ -28,7 +28,9 @@
 #include <log.h>
 #include <components/nofrendo/sndhrdw/nes_apu.h>
 #include <components/nofrendo/cpu/nes6502.h>
- 
+#ifdef _WIN32
+#include <stdlib.h>
+#endif
 
 #define  APU_OVERSAMPLE
 #define  APU_VOLUME_DECAY(x)  ((x) -= ((x) >> 7))

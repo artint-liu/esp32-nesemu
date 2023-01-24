@@ -102,6 +102,10 @@ const mapintf_t *mappers[] =
    NULL
 };
 
+const mapintf_t** GetMappers()
+{
+    return mappers;
+}
 /*
 ** $Log: mmclist.c,v $
 ** Revision 1.2  2001/04/27 14:37:11  neil
