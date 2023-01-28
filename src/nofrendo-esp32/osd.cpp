@@ -35,7 +35,7 @@
 char configfilename[]="na";
 
 /* This is os-specific part of main() */
-int osd_main(int argc, char *argv[])
+int osd_main(void*)
 {
    config.filename = configfilename;
 

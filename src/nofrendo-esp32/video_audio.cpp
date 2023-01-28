@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifdef _WIN32
-#include <FreeRTOS.h>
-#include <timers.h>
-#include <task.h>
-#include <queue.h>
-#else
+//#ifdef _WIN32
+//#include <FreeRTOS.h>
+//#include <timers.h>
+//#include <task.h>
+//#include <queue.h>
+//#else
 #include <freertos/FreeRTOS.h>
 #include <freertos/timers.h>
 #include <freertos/task.h>
 #include <freertos/queue.h>
-#endif
+//#endif
 //Nes stuff wants to define this as well...
 #undef false
 #undef true
@@ -56,6 +56,10 @@
 #define  DEFAULT_WIDTH        256
 #define  DEFAULT_HEIGHT       NES_VISIBLE_HEIGHT
 
+#ifdef _WIN32
+extern "C" void vStartStaticallyAllocatedTasks(void);
+extern "C" void prvStartCheckTask(void);
+#endif
 
 TimerHandle_t timer;
 
@@ -260,9 +264,8 @@ static void videoTask(void *arg) {
 	x = (320-DEFAULT_WIDTH)/2;
     y = ((240-DEFAULT_HEIGHT)/2);
     while(1) {
-//		xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
-		xQueueReceive(vidQueue, &bmp, portMAX_DELAY);
-		LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t **)bmp->line);
+		xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
+		LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t *)bmp->data);
 	}
 }
 
@@ -338,7 +341,14 @@ int osd_init()
 	LCD_Display(0,0,320,240,NULL);
 	vidQueue=xQueueCreate(1, sizeof(bitmap_t *));
 #ifdef _WIN32
+
+	//vStartStaticallyAllocatedTasks();
+	//prvStartCheckTask();
+	//vTaskStartScheduler();
+
 	xTaskCreate(&videoTask, "videoTask", 2048, NULL, 5, NULL);
+	//vTaskStartScheduler();
+
 #else
 	xTaskCreatePinnedToCore(&videoTask, "videoTask", 2048, NULL, 5, NULL, 1);
 #endif

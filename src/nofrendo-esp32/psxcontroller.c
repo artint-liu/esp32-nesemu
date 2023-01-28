@@ -13,17 +13,17 @@
 // limitations under the License.
 
 #include <stdio.h>
-#ifdef _WIN32
-#include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"
-#include "queue.h"
-#else
+//#ifdef _WIN32
+//#include "FreeRTOS.h"
+//#include "task.h"
+//#include "semphr.h"
+//#include "queue.h"
+//#else
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "freertos/queue.h"
-#endif
+//#endif
 
 
 #ifndef _WIN32

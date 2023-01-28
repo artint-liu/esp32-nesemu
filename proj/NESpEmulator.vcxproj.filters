@@ -125,55 +125,16 @@
     <ClInclude Include="..\src\vid_drv.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="FreeRTOS\include\atomic.h">
+    <ClInclude Include="freertos\task.h">
       <Filter>FreeRTOS\include</Filter>
     </ClInclude>
-    <ClInclude Include="FreeRTOS\include\deprecated_definitions.h">
+    <ClInclude Include="freertos\timers.h">
       <Filter>FreeRTOS\include</Filter>
     </ClInclude>
-    <ClInclude Include="FreeRTOS\include\event_groups.h">
+    <ClInclude Include="freertos\FreeRTOS.h">
       <Filter>FreeRTOS\include</Filter>
     </ClInclude>
-    <ClInclude Include="FreeRTOS\include\FreeRTOS.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\list.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\message_buffer.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\mpu_prototypes.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\mpu_wrappers.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\portable.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\projdefs.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\queue.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\semphr.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\stack_macros.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\StackMacros.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\stream_buffer.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\task.h">
-      <Filter>FreeRTOS\include</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeRTOS\include\timers.h">
+    <ClInclude Include="freertos\queue.h">
       <Filter>FreeRTOS\include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -391,37 +352,11 @@
     <ClCompile Include="..\src\vid_drv.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="FreeRTOS\list.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeRTOS\queue.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeRTOS\stream_buffer.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeRTOS\tasks.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeRTOS\timers.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeRTOS\event_groups.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="FreeRTOS\portable\MSVC-MingW\port.c">
-      <Filter>FreeRTOS</Filter>
-    </ClCompile>
     <ClCompile Include="emulator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="freeRTOS_main.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="freertos\FreeRTOS.cpp">
+      <Filter>FreeRTOS</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FreeRTOS\include\stdint.readme">
-      <Filter>FreeRTOS\include</Filter>
-    </None>
   </ItemGroup>
 </Project>

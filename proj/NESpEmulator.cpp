@@ -32,6 +32,7 @@ HWND g_hWnd;
 int nofrendo_main(int argc, char* argv[]);
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter);
 DWORD g_idThread = 0;
+DWORD* g_pScreenBuffer = NULL;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -45,6 +46,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     ULONG_PTR gdiplusToken;
     GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
+    g_pScreen = new Bitmap(SCREEN_WIDTH, SCREEN_HEIGHT, PixelFormat32bppARGB);
+    g_pScreenBuffer = new DWORD[SCREEN_WIDTH * SCREEN_HEIGHT];
 #if 0
     int argc = 0;
     LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
@@ -124,10 +127,35 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+    SAFE_DELETE(g_pScreenBuffer);
     SAFE_DELETE(g_pScreen);
     GdiplusShutdown(gdiplusToken);
 
     return (int) msg.wParam;
+}
+
+void Flush(const DWORD* pSource)
+{
+    Gdiplus::BitmapData bd = { 0 };
+    Gdiplus::Status s = g_pScreen->LockBits(NULL, Gdiplus::ImageLockModeWrite, PixelFormat32bppRGB, &bd);
+    int width = g_pScreen->GetWidth();
+    int height = g_pScreen->GetHeight();
+    if (s == Gdiplus::Ok) {
+        DWORD* pColor;
+        for (int y = 0; y < height; y++) {
+            int index = y * width;
+            pColor = (DWORD*)((INT_PTR)bd.Scan0 + y * bd.Stride);
+
+            for (int x = 0; x < width; x++, index++, pColor++, pSource++) {
+                DWORD d = *pSource;
+                d = ((d & 0xff0000) >> 16) | ((d & 0xff) << 16) | (d & 0xff00ff00);
+                *pColor = d;
+            }
+        }
+        g_pScreen->UnlockBits(&bd);
+    }
+
+    InvalidateRect(g_hWnd, NULL, FALSE);
 }
 
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter)
@@ -237,6 +265,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       //Emulator::keyCallback(pEmulator, wParam, WM_KEYUP);
     }
     break;
+
+    case WM_FLUSHSCREEN:
+        Flush(g_pScreenBuffer);
+        break;
 
     case WM_PAINT: {
         PAINTSTRUCT ps;

@@ -167,23 +167,10 @@
     <ClInclude Include="..\src\version.h" />
     <ClInclude Include="..\src\vid_drv.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="FreeRTOS\include\atomic.h" />
-    <ClInclude Include="FreeRTOS\include\deprecated_definitions.h" />
-    <ClInclude Include="FreeRTOS\include\event_groups.h" />
-    <ClInclude Include="FreeRTOS\include\FreeRTOS.h" />
-    <ClInclude Include="FreeRTOS\include\list.h" />
-    <ClInclude Include="FreeRTOS\include\message_buffer.h" />
-    <ClInclude Include="FreeRTOS\include\mpu_prototypes.h" />
-    <ClInclude Include="FreeRTOS\include\mpu_wrappers.h" />
-    <ClInclude Include="FreeRTOS\include\portable.h" />
-    <ClInclude Include="FreeRTOS\include\projdefs.h" />
-    <ClInclude Include="FreeRTOS\include\queue.h" />
-    <ClInclude Include="FreeRTOS\include\semphr.h" />
-    <ClInclude Include="FreeRTOS\include\StackMacros.h" />
-    <ClInclude Include="FreeRTOS\include\stack_macros.h" />
-    <ClInclude Include="FreeRTOS\include\stream_buffer.h" />
-    <ClInclude Include="FreeRTOS\include\task.h" />
-    <ClInclude Include="FreeRTOS\include\timers.h" />
+    <ClInclude Include="freertos\FreeRTOS.h" />
+    <ClInclude Include="freertos\queue.h" />
+    <ClInclude Include="freertos\task.h" />
+    <ClInclude Include="freertos\timers.h" />
     <ClInclude Include="NESpEmulator.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -260,18 +247,8 @@
     <ClCompile Include="..\src\pcx.cpp" />
     <ClCompile Include="..\src\vid_drv.cpp" />
     <ClCompile Include="emulator.cpp" />
-    <ClCompile Include="FreeRTOS\event_groups.c" />
-    <ClCompile Include="FreeRTOS\list.c" />
-    <ClCompile Include="FreeRTOS\portable\MSVC-MingW\port.c" />
-    <ClCompile Include="FreeRTOS\queue.c" />
-    <ClCompile Include="FreeRTOS\stream_buffer.c" />
-    <ClCompile Include="FreeRTOS\tasks.c" />
-    <ClCompile Include="FreeRTOS\timers.c" />
-    <ClCompile Include="freeRTOS_main.c" />
+    <ClCompile Include="freertos\FreeRTOS.cpp" />
     <ClCompile Include="NESpEmulator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FreeRTOS\include\stdint.readme" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

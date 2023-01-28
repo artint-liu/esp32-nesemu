@@ -34,9 +34,17 @@
 #include <osd.h>
 #include <gui.h>
 #include <vid_drv.h>
+#ifdef _WIN32
+#include <Windows.h>
+//#include <FreeRTOS.h>
+//#include <task.h>
+#endif
 
 /* emulated system includes */
 #include <components/nofrendo/nes/nes.h>
+//#ifdef _WIN32
+//extern "C" int FreeRTOS_main(void);
+//#endif
 
 /* our global machine structure */
 static struct
@@ -202,6 +210,9 @@ void main_insert(const char *filename, system_t type)
 
 int nofrendo_main(int argc, char *argv[])
 {
+//#ifdef _WIN32
+//    FreeRTOS_main();
+//#endif
    /* initialize our system structure */
    console.filename = NULL;
    console.nextfilename = NULL;
@@ -215,7 +226,12 @@ int nofrendo_main(int argc, char *argv[])
 
    event_init();
 
-   return osd_main(argc, argv);
+//#ifdef _WIN32
+//   xTaskCreate((TaskFunction_t)&osd_main, "MainTask", 4096, NULL, 6, NULL);
+//   vTaskStartScheduler();
+//#else
+   return osd_main(nullptr);
+//#endif
 }
 
 /* This is the final leg of main() */
