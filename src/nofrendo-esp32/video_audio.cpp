@@ -211,20 +211,27 @@ static int set_mode(int width, int height)
 }
 
 uint16 myPalette[256];
+#ifdef _WIN32
+uint32 myPalette32[256];
+#endif
 
 /* copy nes palette over to hardware */
 static void set_palette(rgb_t *pal)
 {
-	uint16 c;
+    uint16 c;
 
-   int i;
+    int i;
 
-   for (i = 0; i < 256; i++)
-   {
-      c=(pal[i].b>>3)+((pal[i].g>>2)<<5)+((pal[i].r>>3)<<11);
-      //myPalette[i]=(c>>8)|((c&0xff)<<8);
-      myPalette[i]=c;
-   }
+    for (i = 0; i < 256; i++)
+    {
+        c = (pal[i].b >> 3) | ((pal[i].g >> 2) << 5) | ((pal[i].r >> 3) << 11);
+        //myPalette[i]=(c>>8)|((c&0xff)<<8);
+        myPalette[i] = c;
+#ifdef _WIN32
+        //myPalette32[i] = (pal[i].r) | (pal[i].g << 8) | (pal[i].b << 16);
+        myPalette32[i] = (pal[i].r & 0xff) | ((pal[i].g & 0xff) << 8) | ((pal[i].b & 0xff) << 16) | 0xff000000;
+#endif
+    }
 
 }
 

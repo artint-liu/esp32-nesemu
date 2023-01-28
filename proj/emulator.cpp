@@ -2,10 +2,13 @@
 #include <gdiplus.h>
 #include <inttypes.h>
 #include "NESpEmulator.h"
+#include "noftypes.h"
 
 const unsigned char rom[] = {
 #include "rom.h"
 };
+
+extern uint32 myPalette32[256];
 
 const unsigned char* osd_getromdata()
 {
@@ -24,9 +27,7 @@ void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const
         for (int n = 0; n < width; n++)
         {
             int index = i * 256 + n;
-            DWORD c = (DWORD)data[index];
-            DWORD col = (c << 24) | (c << 16) | (c << 8) | c;
-            g_pScreenBuffer[i * 256 + n] = col;
+            g_pScreenBuffer[(SCREEN_HEIGHT - (i + y) - 1) * SCREEN_WIDTH + n + x] = myPalette32[data[index]];
         }
     }
 

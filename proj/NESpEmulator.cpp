@@ -12,8 +12,6 @@
 
 using namespace Gdiplus;
 #pragma comment(lib, "gdiplus.lib")
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 240
 
 // 全局变量:
 HINSTANCE hInst;                                       // 当前实例
