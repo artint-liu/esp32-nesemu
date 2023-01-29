@@ -18,6 +18,9 @@
     <Filter Include="FreeRTOS\include">
       <UniqueIdentifier>{b324ac19-2c0d-47be-9c58-3ea4f67221bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\mappers">
+      <UniqueIdentifier>{d7d21c79-b1c3-4661-b77e-489cdf1f909d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -154,123 +157,6 @@
     <ClCompile Include="..\src\components\nofrendo\libsnss\libsnss.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map000.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map001.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map002.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map003.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map004.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map005.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map007.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map008.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map009.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map011.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map015.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map016.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map018.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map019.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map024.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map032.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map033.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map034.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map040.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map041.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map042.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map046.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map050.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map064.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map065.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map066.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map070.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map073.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map075.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map078.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map079.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map085.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map087.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map093.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map094.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map099.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map160.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map229.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\nofrendo\mappers\map231.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\components\nofrendo\mappers\mapvrc.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -357,6 +243,123 @@
     </ClCompile>
     <ClCompile Include="freertos\FreeRTOS.cpp">
       <Filter>FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map000.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map001.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map002.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map003.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map004.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map005.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map007.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map008.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map009.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map011.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map015.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map016.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map018.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map019.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map024.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map032.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map033.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map034.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map040.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map041.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map042.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map046.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map050.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map064.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map065.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map066.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map070.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map073.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map075.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map078.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map079.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map085.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map087.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map093.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map094.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map099.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map160.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map229.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map231.cpp">
+      <Filter>src\mappers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

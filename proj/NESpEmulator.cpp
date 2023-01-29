@@ -29,6 +29,7 @@ HWND g_hWnd;
 
 int nofrendo_main(int argc, char* argv[]);
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter);
+void KeyCallback(int key, int action);
 DWORD g_idThread = 0;
 DWORD* g_pScreenBuffer = NULL;
 
@@ -250,7 +251,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
     {
       //Emulator* pEmulator = reinterpret_cast<Emulator*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-      //Emulator::keyCallback(pEmulator, wParam, WM_KEYDOWN);
+      KeyCallback(wParam, WM_KEYDOWN);
     }
       break;
 
@@ -260,7 +261,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_KEYUP:
     {
       //Emulator* pEmulator = reinterpret_cast<Emulator*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-      //Emulator::keyCallback(pEmulator, wParam, WM_KEYUP);
+      KeyCallback(wParam, WM_KEYUP);
     }
     break;
 

@@ -288,25 +288,40 @@ static void osd_initinput()
 
 void osd_getinput(void)
 {
-	const int ev[16]={
-			event_joypad1_select,0,0,event_joypad1_start,event_joypad1_up,event_joypad1_right,event_joypad1_down,event_joypad1_left,
-			0,0,0,0,event_soft_reset,event_joypad1_a,event_joypad1_b,event_hard_reset
-		};
-	static int oldb=0xffff;
-	int b=psxReadInput();
-	int chg=b^oldb;
-	int x;
-	oldb=b;
-	event_t evh;
-//	printf("Input: %x\n", b);
-	for (x=0; x<16; x++) {
-		if (chg&1) {
-			evh=event_get(ev[x]);
-			if (evh) evh((b&1)?INP_STATE_BREAK:INP_STATE_MAKE);
-		}
-		chg>>=1;
-		b>>=1;
-	}
+    const int ev[16] = {
+            event_joypad1_select, // 0
+            0,					  // 1
+            0,					  // 2
+            event_joypad1_start,  // 3
+            event_joypad1_up,	  // 4
+            event_joypad1_right,  // 5
+            event_joypad1_down,	  // 6
+            event_joypad1_left,	  // 7
+            0,					  // 8
+            0,					  // 9
+            0,					  // 10
+            0,					  // 11
+            event_soft_reset,	  // 12
+            event_joypad1_a,	  // 13
+            event_joypad1_b,	  // 14
+            event_hard_reset	  // 15
+    };
+
+    static int oldb = 0xffff;
+    int b = psxReadInput();
+    int chg = b ^ oldb;
+    int x;
+    oldb = b;
+    event_t evh;
+    //	printf("Input: %x\n", b);
+    for (x = 0; x < 16; x++) {
+        if (chg & 1) {
+            evh = event_get(ev[x]);
+            if (evh) evh((b & 1) ? INP_STATE_BREAK : INP_STATE_MAKE);
+        }
+        chg >>= 1;
+        b >>= 1;
+    }
 }
 
 static void osd_freeinput(void)
