@@ -241,20 +241,29 @@ int main_loop(const char *filename, system_t type)
 
    /* register shutdown, in case of assertions, etc. */
 //   atexit(shutdown_everything);
+   TRACE("enter main_loop");
 
    if (config.open())
       return -1;
+   
+   TRACE("config opened");
+
 
    if (osd_init())
       return -1;
+   TRACE("osd inited");
+
 
    if (gui_init())
       return -1;
+   TRACE("gui inited");
+
 
    osd_getvideoinfo(&video);
    if (vid_init(video.default_width, video.default_height, video.driver))
       return -1;
-	printf("vid_init done\n");
+
+   TRACE("vid_init done\n");
 
    console.nextfilename = strdup(filename);
    console.nexttype = type;

@@ -38,6 +38,12 @@ typedef enum
 
 int nofrendo_main(int argc, char *argv[]);
 
+#ifdef _WIN32
+#define TRACE(x)
+#else
+extern void MyTrace(const char*);
+#define TRACE(x) MyTrace(x)
+#endif
 
 extern volatile int nofrendo_ticks; /* system timer ticks */
 
