@@ -358,10 +358,17 @@ int osd_init()
 
 	if (osd_init_sound())
 		return -1;
+	TRACE("osd_init_sound ok");
 
 	LCD_Init();
-	LCD_Display(0,0,320,240,NULL);
+	TRACE("LCD_Init ok");
+
+	//LCD_Display(0,0,320,240, NULL);
+
 	vidQueue=xQueueCreate(1, sizeof(bitmap_t *));
+	
+	TRACE("call xQueueCreate ok");
+
 #ifdef _WIN32
 
 	//vStartStaticallyAllocatedTasks();
@@ -373,7 +380,10 @@ int osd_init()
 
 #else
 	xTaskCreatePinnedToCore(&videoTask, "videoTask", 2048, NULL, 5, NULL, 1);
+	TRACE("create video task thread ok");
 #endif
+
 	osd_initinput();
+	TRACE("osd_initinput ok");
 	return 0;
 }

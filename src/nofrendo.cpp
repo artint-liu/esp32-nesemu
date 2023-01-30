@@ -226,12 +226,8 @@ int nofrendo_main(int argc, char *argv[])
 
    event_init();
 
-//#ifdef _WIN32
-//   xTaskCreate((TaskFunction_t)&osd_main, "MainTask", 4096, NULL, 6, NULL);
-//   vTaskStartScheduler();
-//#else
+
    return osd_main(nullptr);
-//#endif
 }
 
 /* This is the final leg of main() */
@@ -251,12 +247,12 @@ int main_loop(const char *filename, system_t type)
 
    if (osd_init())
       return -1;
-   TRACE("osd inited");
+   TRACE("osd_init ok");
 
 
    if (gui_init())
       return -1;
-   TRACE("gui inited");
+   TRACE("gui_init ok");
 
 
    osd_getvideoinfo(&video);
