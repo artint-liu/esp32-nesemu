@@ -35,6 +35,7 @@ void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const
         return;
     }
 
+#if 1
     for (int i = 0; i < height; i++)
     {
         for (int n = 0; n < width; n++)
@@ -43,6 +44,16 @@ void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const
             g_pScreenBuffer[(SCREEN_HEIGHT - (i + y) - 1) * SCREEN_WIDTH + n + x] = myPalette32[data[index]];
         }
     }
+#else
+    for (int i = 0; i < height; i++)
+    {
+        for (int n = 0; n < width; n++)
+        {
+            int index = i * 256 + n;
+            g_pScreenBuffer[(n + x) * SCREEN_WIDTH + (i + y)] = myPalette32[data[index]];
+        }
+    }
+#endif
 
     SendMessage(g_hWnd, WM_FLUSHSCREEN, 0, 0);
 }

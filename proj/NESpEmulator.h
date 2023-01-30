@@ -4,7 +4,7 @@
 #include <gdiplus.h>
 //#include "resource.h"
 #define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_HEIGHT 320
 #define WM_FLUSHSCREEN (WM_USER + 1)
 extern DWORD* g_pScreenBuffer;
 extern HWND g_hWnd;

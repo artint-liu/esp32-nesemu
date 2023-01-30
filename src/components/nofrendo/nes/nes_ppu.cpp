@@ -576,11 +576,9 @@ void ppu_setvromswitch(ppuvromswitch_t func)
 }
 
 /* rendering routines */
-INLINE void draw_bgtile(uint8 *surface, uint8 pat1, uint8 pat2, 
-                        const uint8 *colors)
+INLINE void draw_bgtile(uint8 *surface, uint8 pat1, uint8 pat2, const uint8 *colors)
 {
-   uint32 pattern = ((pat2 & 0xAA) << 8) | ((pat2 & 0x55) << 1)
-                    | ((pat1 & 0xAA) << 7) | (pat1 & 0x55);
+   uint32 pattern = ((pat2 & 0xAA) << 8) | ((pat2 & 0x55) << 1) | ((pat1 & 0xAA) << 7) | (pat1 & 0x55);
    
    *surface++ = colors[(pattern >> 14) & 3];
    *surface++ = colors[(pattern >> 6) & 3];
@@ -590,6 +588,18 @@ INLINE void draw_bgtile(uint8 *surface, uint8 pat1, uint8 pat2,
    *surface++ = colors[(pattern >> 2) & 3];
    *surface++ = colors[(pattern >> 8) & 3];
    *surface = colors[pattern & 3];
+}
+
+INLINE void draw_bgtile(uint8* surface, uint8 pat1, uint8 pat2, const uint8* colors, uint8 offset)
+{
+    uint32 pattern = ((pat2 & 0xAA) << 8) | ((pat2 & 0x55) << 1) | ((pat1 & 0xAA) << 7) | (pat1 & 0x55);
+
+    const uint32 sht[8] = {14, 6, 12, 4, 10, 2, 8, 0};
+
+    for (uint8 i = offset; i < 8; i++)
+    {
+        surface[i] = colors[(pattern >> sht[i]) & 3];
+    }
 }
 
 INLINE int draw_oamtile(uint8 *surface, uint8 attrib, uint8 pat1, 
@@ -734,7 +744,14 @@ static void ppu_renderbg(uint8 *vidbuf)
       if (ppu.latchfunc)
          ppu.latchfunc(ppu.bg_base, tile_index);
 
-      draw_bgtile(bmp_ptr, data_ptr[0], data_ptr[8], ppu.palette + col_high);
+      if (bmp_ptr < vidbuf)
+      {
+        draw_bgtile(bmp_ptr, data_ptr[0], data_ptr[8], ppu.palette + col_high, ppu.tile_xofs);
+      }
+      else
+      {
+        draw_bgtile(bmp_ptr, data_ptr[0], data_ptr[8], ppu.palette + col_high);
+      }
       bmp_ptr += 8;
 
       x_tile++;
