@@ -33,6 +33,11 @@ void KeyCallback(int key, int action);
 DWORD g_idThread = 0;
 DWORD* g_pScreenBuffer = NULL;
 
+// 输出尺寸
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 240
+
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -139,18 +144,34 @@ void Flush(const DWORD* pSource)
     Gdiplus::Status s = g_pScreen->LockBits(NULL, Gdiplus::ImageLockModeWrite, PixelFormat32bppRGB, &bd);
     int width = g_pScreen->GetWidth();
     int height = g_pScreen->GetHeight();
-    if (s == Gdiplus::Ok) {
+    if (s == Gdiplus::Ok)
+    {
         DWORD* pColor;
-        for (int y = 0; y < height; y++) {
-            int index = y * width;
-            pColor = (DWORD*)((INT_PTR)bd.Scan0 + y * bd.Stride);
+        //for (int y = 0; y < height; y++) {
+        //    int index = y * width;
+        //    pColor = (DWORD*)((INT_PTR)bd.Scan0 + y * bd.Stride);
 
-            for (int x = 0; x < width; x++, index++, pColor++, pSource++) {
+        //    for (int x = 0; x < width; x++, index++, pColor++, pSource++) {
+        //        DWORD d = *pSource;
+        //        d = ((d & 0xff0000) >> 16) | ((d & 0xff) << 16) | (d & 0xff00ff00);
+        //        *pColor = d;
+        //    }
+        //}
+
+        for (int x = width - 1; x >= 0; x--)
+        {
+            pColor = (DWORD*)((INT_PTR)bd.Scan0 + x * sizeof(DWORD) + (height - 1) * bd.Stride);
+
+            for (int y = 0; y < height; y++, pSource++)
+            {
                 DWORD d = *pSource;
                 d = ((d & 0xff0000) >> 16) | ((d & 0xff) << 16) | (d & 0xff00ff00);
                 *pColor = d;
+                pColor = (DWORD*)((INT_PTR)pColor - bd.Stride);
+
             }
         }
+
         g_pScreen->UnlockBits(&bd);
     }
 
@@ -275,7 +296,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         GetClientRect(hWnd, &rect);
         HDC hdc = BeginPaint(hWnd, &ps);
 
-        Graphics g(hdc);
+        Gdiplus::Graphics g(hdc);
         // g.SetInterpolationMode(InterpolationModeNearestNeighbor);
         const int width = SCREEN_WIDTH;
         const int height = -SCREEN_HEIGHT;

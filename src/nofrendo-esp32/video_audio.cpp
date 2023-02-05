@@ -42,7 +42,9 @@
 #include <components/nofrendo/nes/nesinput.h>
 #include <osd.h>
 #include <stdint.h>
-#ifndef _WIN32
+#ifdef _WIN32
+#define delay Sleep
+#else
 #include "driver/i2s.h"
 #include "sdkconfig.h"
 #endif
@@ -164,6 +166,7 @@ static void custom_blit(bitmap_t *bmp, int num_dirties, rect_t *dirty_rects);
 static char fb[1]; //dummy
 
 QueueHandle_t vidQueue;
+uint8_t useQueue = false;
 
 viddriver_t sdlDriver =
 {
@@ -259,6 +262,7 @@ static void free_write(int num_dirties, rect_t *dirty_rects)
 
 
 static void custom_blit(bitmap_t *bmp, int num_dirties, rect_t *dirty_rects) {
+	useQueue = true;
 	xQueueSend(vidQueue, &bmp, 0);
 	do_audio_frame();
 }
@@ -271,8 +275,16 @@ static void videoTask(void *arg) {
 	x = (320-DEFAULT_WIDTH)/2;
     y = ((240-DEFAULT_HEIGHT)/2);
     while(1) {
-		xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
-		LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t *)bmp->data);
+		if (useQueue)
+		{
+			xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
+			LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp->data);
+		}
+		else
+		{
+			delay(33);
+			LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp ? bmp->data : NULL);
+		}
 	}
 }
 

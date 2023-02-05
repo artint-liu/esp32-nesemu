@@ -21,6 +21,9 @@
     <Filter Include="src\mappers">
       <UniqueIdentifier>{d7d21c79-b1c3-4661-b77e-489cdf1f909d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HZK">
+      <UniqueIdentifier>{dac88234-35e8-42f0-8883-574fd8118de1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -139,6 +142,24 @@
     </ClInclude>
     <ClInclude Include="freertos\queue.h">
       <Filter>FreeRTOS\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artint_HZK\Font.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artint_HZK\hzk16.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artint_HZK\ucs2_gbk.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artint_HZK\ucs2_gbk_table.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artint_HZK\ASCII16.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\console.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -361,5 +382,19 @@
     <ClCompile Include="..\src\components\nofrendo\mappers\map231.cpp">
       <Filter>src\mappers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Artint_HZK\Font.cpp">
+      <Filter>HZK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Artint_HZK\ucs2_gbk.cpp">
+      <Filter>HZK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\console.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Artint_HZK\README.md">
+      <Filter>HZK</Filter>
+    </None>
   </ItemGroup>
 </Project>
