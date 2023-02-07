@@ -143,23 +143,20 @@
     <ClInclude Include="freertos\queue.h">
       <Filter>FreeRTOS\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Artint_HZK\Font.h">
-      <Filter>HZK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Artint_HZK\hzk16.h">
-      <Filter>HZK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Artint_HZK\ucs2_gbk.h">
-      <Filter>HZK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Artint_HZK\ucs2_gbk_table.h">
-      <Filter>HZK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Artint_HZK\ASCII16.h">
-      <Filter>HZK</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\console.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artino_Common\hzk16.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artino_Common\ucs2_gbk_table.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artino_Common\ASCII16.h">
+      <Filter>HZK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Artino_Common\Font.h">
+      <Filter>HZK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -382,18 +379,18 @@
     <ClCompile Include="..\src\components\nofrendo\mappers\map231.cpp">
       <Filter>src\mappers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Artint_HZK\Font.cpp">
-      <Filter>HZK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Artint_HZK\ucs2_gbk.cpp">
-      <Filter>HZK</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\console.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Artino_Common\ucs2_gbk.cpp">
+      <Filter>HZK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Artino_Common\Font.cpp">
+      <Filter>HZK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Artint_HZK\README.md">
+    <None Include="..\..\Artino_Common\README.md">
       <Filter>HZK</Filter>
     </None>
   </ItemGroup>
