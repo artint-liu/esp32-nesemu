@@ -10,7 +10,14 @@
 
 void Console::Clear()
 {
-    LCD_Fill(0, 0, LCD_W, LCD_H, 0);
+    LCD_Fill(0, 0, LCD_W, LCD_H, m_crTextBk);
+}
+
+void Console::SetTextColor(uint16_t crText, uint16_t crBk)
+{
+    m_crText = crText;
+    m_crTextBk = crBk;
+    LCD_SetTextColor(crText, crBk);
 }
 
 void Console::Outputln(const char* szText)

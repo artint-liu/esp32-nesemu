@@ -1,11 +1,17 @@
 #include <Windows.h>
 #include <gdiplus.h>
 #include <inttypes.h>
+#include <shlwapi.h>
 #include "NESpEmulator.h"
 #include "noftypes.h"
 #include "Font.h"
 #include "..\src\nofrendo-esp32\lcd.h"
 #include "console.h"
+
+#include <vector>
+#include <string>
+
+#pragma comment(lib, "Shlwapi.lib")
 
 Console console;
 
@@ -29,21 +35,114 @@ void LCD_Write(int x, int y, const char* text, size_t len);
 #define KEYSHIFT_SOFT_RESET	   12
 #define KEYSHIFT_HARD_RESET	   15
 
+#define RGB16(r, g, b) (((b >> 3) << 11) | ((g >> 2) << 5) | (r >> 3))
+#define YELLOW RGB16(255, 255, 0)
+#define BLUE RGB16(0, 0, 255)
+//#define RGB32to16
+#define RGB16to32(rgb) (((((rgb & 0xf800) >> 11) << 3) | 7) << 16) | (((((rgb & 0x7E0) >> 5) << 2) | 3) << 8) | (((rgb & 0x1f) << 3) | 7)
+
+//class FileList
+//{
+//    BOOL OpenDir(const char* szDir)
+//    {
+//        FindFirstFile()
+//    }
+//
+//    BOOL Next()
+//    {
+//
+//    }
+//};
+
+struct MyFile
+{
+    HANDLE hFind;
+    WIN32_FIND_DATAA wfd;
+
+    MyFile OpenNextFile()
+    {
+        BOOL result = FindNextFileA(hFind, &wfd);
+        if (!result)
+        {
+            FindClose(hFind);
+            hFind = INVALID_HANDLE_VALUE;
+            memset(&wfd, 0, sizeof(WIN32_FIND_DATAA));
+        }
+        return *this;
+    }
+
+    operator bool() const
+    {
+        return (hFind != INVALID_HANDLE_VALUE);
+    }
+
+    const char* name() const
+    {
+        return wfd.cFileName;
+    }
+};
+
+MyFile OpenDir(const char* strDir)
+{
+    MyFile file = {0};
+    char buffer[MAX_PATH];
+    memset(&file, 0, sizeof(MyFile));
+    GetCurrentDirectoryA(MAX_PATH, buffer);
+    PathCombineA(buffer, buffer, "*");
+
+    file.hFind = FindFirstFileA(buffer, &file.wfd);
+    return file;
+}
+
 
 const unsigned char* osd_getromdata()
 {
-    console.DrawWindow(2, 2, 36, 13);
+    console.SetTextColor(YELLOW, BLUE);
+    console.Clear();
+    //console.DrawWindow(0, 0, 40, 15);
     delay(1000);
-    console.Outputln("Hello world");
-    console.Outputln("Can not find SD");
-    for (int i = 0; i < 20; i++)
+    MyFile root = OpenDir("/");
+    std::vector<std::string> files;
+    if (root)
     {
-        char buffer[128];
-        sprintf(buffer, "string %2d %*c", i, i + 1, '#');
-        console.Outputln(buffer);
-        delay(200);
+        MyFile file = root.OpenNextFile();
+        while (file)
+        {
+            files.push_back(file.name());
+            file = root.OpenNextFile();
+            //delay(100);
+        }
     }
-    delay(1000);
+
+    int index = 0;
+    int select = 0;
+    for (auto str : files)
+    {
+        if (index == select)
+        {
+            console.SetTextColor(BLUE, YELLOW);
+        }
+        else
+        {
+            console.SetTextColor(YELLOW, BLUE);
+        }
+
+        console.Outputln(str.c_str());
+        delay(200);
+        index++;
+    }
+
+
+    //console.Outputln("Hello world");
+    //console.Outputln("Can not find SD");
+    //for (int i = 0; i < 20; i++)
+    //{
+    //    char buffer[128];
+    //    sprintf(buffer, "string %2d %*c", i, i + 1, '#');
+    //    console.Outputln(buffer);
+    //    delay(200);
+    //}
+    //delay(1000);
     console.Clear();
     return rom;
 }
@@ -65,9 +164,9 @@ void LCD_Scroll(int16_t offsetX, int16_t offsetY)
     }
 }
 
-void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint32_t color)
+void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16_t color)
 {
-    uint32_t col = color;
+    uint32_t col = RGB16to32(color);
     for (int y = ysta; y < yend; y++)
     {
         int index = y * LCD_W;
@@ -161,10 +260,14 @@ void KeyCallback(int key, int action)
     }
 }
 
-void LCD_DrawPixel(uint16_t x, uint16_t y, uint32_t color)
+
+void LCD_DrawPixel(uint16_t x, uint16_t y, uint16_t color)
 {
-    int index = (y * LCD_W + x);
-    g_pScreenBuffer[index] = color;
+    if (x < LCD_W && y < LCD_H)
+    {
+        int index = (y * LCD_W + x);
+        g_pScreenBuffer[index] = RGB16to32(color);
+    }
 }
 
 
@@ -248,7 +351,7 @@ void LCD_WriteASCII(int x, int y, const char* text, size_t len)
         text += L;
         i += L;
         x += font.width;
-        if (x + 8 >= LCD_H)
+        if (x + 8 > LCD_H)
         {
             x = 0;
             y += font.height;
