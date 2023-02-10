@@ -4,12 +4,14 @@
 #include <shlwapi.h>
 #include "NESpEmulator.h"
 #include "noftypes.h"
-#include "Font.h"
+#include "Artino_Font.h"
 #include "..\src\nofrendo-esp32\lcd.h"
 #include "console.h"
 
 #include <vector>
 #include <string>
+
+#include <Artino_Menu.h>
 
 #pragma comment(lib, "Shlwapi.lib")
 
@@ -40,6 +42,7 @@ void LCD_Write(int x, int y, const char* text, size_t len);
 #define BLUE RGB16(0, 0, 255)
 //#define RGB32to16
 #define RGB16to32(rgb) (((((rgb & 0xf800) >> 11) << 3) | 7) << 16) | (((((rgb & 0x7E0) >> 5) << 2) | 3) << 8) | (((rgb & 0x1f) << 3) | 7)
+int psxReadInput();
 
 //class FileList
 //{
@@ -53,6 +56,52 @@ void LCD_Write(int x, int y, const char* text, size_t len);
 //
 //    }
 //};
+
+class Menu : public Artino::Menu
+{
+    uint32_t m_dwPrevKey = psxReadInput();
+public:
+    Menu(const Artino::MENU_ITEM* items, uint16_t count)
+        : Artino::Menu(items, count)
+    {
+
+    }
+
+    Artino::MenuKey GetKey() override
+    {
+        uint32_t key = psxReadInput();
+        uint32_t dwPrevKey = m_dwPrevKey;
+        m_dwPrevKey = key;
+
+        if ((dwPrevKey & (1 << KEYSHIFT_UP)) && (key & (1 << KEYSHIFT_UP)) == 0)
+        {
+            return Artino::MenuKey_Up;
+        }
+        else if ((dwPrevKey & (1 << KEYSHIFT_DOWN)) && (key & (1 << KEYSHIFT_DOWN)) == 0)
+        {
+            return Artino::MenuKey_Down;
+        }
+        else if ((dwPrevKey & (1 << KEYSHIFT_RIGHT)) && (key & (1 << KEYSHIFT_RIGHT)) == 0)
+        {
+            return Artino::MenuKey_Confirm;
+        }
+
+        return Artino::MenuKey_None;
+    }
+
+    void OnDrawItem(int x, int y, const char* text, bool selected) override
+    {
+        if (selected)
+        {
+            LCD_SetTextColor(BLUE, YELLOW);
+        }
+        else
+        {
+            LCD_SetTextColor(YELLOW, BLUE);
+        }
+        LCD_Write(x, y, text, -1);
+    }
+};
 
 struct MyFile
 {
@@ -102,6 +151,7 @@ const unsigned char* osd_getromdata()
     //console.DrawWindow(0, 0, 40, 15);
     delay(1000);
     MyFile root = OpenDir("/");
+    
     std::vector<std::string> files;
     if (root)
     {
@@ -114,23 +164,36 @@ const unsigned char* osd_getromdata()
         }
     }
 
-    int index = 0;
-    int select = 0;
-    for (auto str : files)
+    std::vector<Artino::MENU_ITEM> filesptr;
+    for (std::string& item : files)
     {
-        if (index == select)
-        {
-            console.SetTextColor(BLUE, YELLOW);
-        }
-        else
-        {
-            console.SetTextColor(YELLOW, BLUE);
-        }
-
-        console.Outputln(str.c_str());
-        delay(200);
-        index++;
+        Artino::MENU_ITEM mi;
+        mi.text = item.c_str();
+        filesptr.push_back(mi);
     }
+
+    Menu menu(&filesptr.front(), filesptr.size());
+
+    int select = menu.Loop();
+
+
+    //int index = 0;
+    //int select = 0;
+    //for (auto str : files)
+    //{
+    //    if (index == select)
+    //    {
+    //        console.SetTextColor(BLUE, YELLOW);
+    //    }
+    //    else
+    //    {
+    //        console.SetTextColor(YELLOW, BLUE);
+    //    }
+
+    //    console.Outputln(str.c_str());
+    //    delay(200);
+    //    index++;
+    //}
 
 
     //console.Outputln("Hello world");
@@ -266,7 +329,10 @@ void LCD_DrawPixel(uint16_t x, uint16_t y, uint16_t color)
     if (x < LCD_W && y < LCD_H)
     {
         int index = (y * LCD_W + x);
-        g_pScreenBuffer[index] = RGB16to32(color);
+        if (g_pScreenBuffer)
+        {
+            g_pScreenBuffer[index] = RGB16to32(color);
+        }
     }
 }
 

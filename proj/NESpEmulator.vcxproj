@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WIN32;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\include\;$(ProjectDir)..\src\;$(ProjectDir)FreeRTOS\include;$(ProjectDir)FreeRTOS\portable\MSVC-MingW;$(ProjectDir)..\..\Artino_Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\include\;$(ProjectDir)..\src\;$(ProjectDir)FreeRTOS\include;$(ProjectDir)FreeRTOS\portable\MSVC-MingW;$(ProjectDir)..\..\Artino_Common\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -135,10 +135,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Artino_Common\ASCII16.h" />
-    <ClInclude Include="..\..\Artino_Common\Font.h" />
-    <ClInclude Include="..\..\Artino_Common\hzk16.h" />
-    <ClInclude Include="..\..\Artino_Common\ucs2_gbk_table.h" />
+    <ClInclude Include="..\..\Artino_Common\src\Artino_Console.h" />
+    <ClInclude Include="..\..\Artino_Common\src\Artino_Font.h" />
+    <ClInclude Include="..\..\Artino_Common\src\Artino_Menu.h" />
+    <ClInclude Include="..\..\Artino_Common\src\hzk\ASCII16.h" />
+    <ClInclude Include="..\..\Artino_Common\src\hzk\hzk16.h" />
+    <ClInclude Include="..\..\Artino_Common\src\hzk\ucs2_gbk_table.h" />
     <ClInclude Include="..\src\bitmap.h" />
     <ClInclude Include="..\src\components\nofrendo\cpu\dis6502.h" />
     <ClInclude Include="..\src\components\nofrendo\cpu\nes6502.h" />
@@ -181,8 +183,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Artino_Common\Font.cpp" />
-    <ClCompile Include="..\..\Artino_Common\ucs2_gbk.cpp" />
+    <ClCompile Include="..\..\Artino_Common\src\Artino_Console.cpp" />
+    <ClCompile Include="..\..\Artino_Common\src\hzk\Font.cpp" />
+    <ClCompile Include="..\..\Artino_Common\src\hzk\ucs2_gbk.cpp" />
     <ClCompile Include="..\src\bitmap.cpp" />
     <ClCompile Include="..\src\components\nofrendo\cpu\dis6502.cpp" />
     <ClCompile Include="..\src\components\nofrendo\cpu\nes6502.cpp" />
@@ -257,9 +260,6 @@
     <ClCompile Include="emulator.cpp" />
     <ClCompile Include="freertos\FreeRTOS.cpp" />
     <ClCompile Include="NESpEmulator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Artino_Common\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
