@@ -61,6 +61,8 @@
 #ifdef _WIN32
 extern "C" void vStartStaticallyAllocatedTasks(void);
 extern "C" void prvStartCheckTask(void);
+#else
+extern "C" void delay(uint32_t ms);
 #endif
 
 TimerHandle_t timer;
@@ -182,20 +184,24 @@ viddriver_t sdlDriver =
    false          /* invalidate flag */
 };
 
-
+#define MY_BITMAP
+#ifdef MY_BITMAP
 bitmap_t *myBitmap;
+#endif
 
 void osd_getvideoinfo(vidinfo_t *info)
 {
-   info->default_width = DEFAULT_WIDTH;
-   info->default_height = DEFAULT_HEIGHT;
-   info->driver = &sdlDriver;
+  TRACE("osd_getvideoinfo");
+  info->default_width = DEFAULT_WIDTH;
+  info->default_height = DEFAULT_HEIGHT;
+  info->driver = &sdlDriver;
+  TRACE("osd_getvideoinfo ok");
 }
 
 /* flip between full screen and windowed */
-void osd_togglefullscreen(int code)
-{
-}
+//void osd_togglefullscreen(int code)
+//{
+//}
 
 /* initialise video */
 static int init(int width, int height)
@@ -249,15 +255,19 @@ static void clear(uint8 color)
 /* acquire the directbuffer for writing */
 static bitmap_t *lock_write(void)
 {
+#ifdef MY_BITMAP
 //   SDL_LockSurface(mySurface);
    myBitmap = bmp_createhw((uint8*)fb, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH*2);
    return myBitmap;
+#endif
 }
 
 /* release the resource */
 static void free_write(int num_dirties, rect_t *dirty_rects)
 {
+#ifdef MY_BITMAP
    bmp_destroy(&myBitmap);
+#endif
 }
 
 
@@ -269,23 +279,31 @@ static void custom_blit(bitmap_t *bmp, int num_dirties, rect_t *dirty_rects) {
 
 
 //This runs on core 1.
-static void videoTask(void *arg) {
-	int x, y;
-	bitmap_t *bmp=NULL;
-	x = (320-DEFAULT_WIDTH)/2;
-    y = ((240-DEFAULT_HEIGHT)/2);
-    while(1) {
-		if (useQueue)
-		{
-			xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
-			LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp->data);
-		}
-		else
-		{
-			delay(33);
-			LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp ? bmp->data : NULL);
-		}
-	}
+static void videoTask(void *arg)
+{
+  int x, y;
+  bitmap_t* bmp = NULL;
+  x = (320 - DEFAULT_WIDTH) / 2;
+  y = ((240 - DEFAULT_HEIGHT) / 2);
+  //TRACE("videoTask start");
+
+  while (1) {
+    if (useQueue)
+    {
+      //TRACE("xQueueReceive vidQueue"); 
+      xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
+      //TRACE("xQueueReceive vidQueue ok");
+      LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp->data);
+      //TRACE("LCD_Display ok");
+    }
+    else
+    {
+      delay(33);
+      //TRACE("LCD_Display");
+      LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp ? bmp->data : NULL);
+      //TRACE("LCD_Display ok");
+    }
+  }
 }
 
 

@@ -397,5 +397,8 @@
     <ClCompile Include="..\..\Artino_Common\src\hzk\Font.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\fileloading.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

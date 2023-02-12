@@ -391,41 +391,50 @@ int vid_setmode(int width, int height)
 
 static int vid_findmode(int width, int height, viddriver_t *osd_driver)
 {
-   if (osd_driver->init(width, height))
-   {
-      driver = NULL;
-      return -1; /* mode not available! */
-   }
+  TRACE("driver->init()");
 
-   /* we got our driver */
-   driver = osd_driver;
+  if (osd_driver->init(width, height))
+  {
+    driver = NULL;
+    return -1; /* mode not available! */
+  }
+  TRACE("driver->init() ok");
 
-   /* re-assert dimensions, clear the surface */
-   screen = driver->lock_write();
+  /* we got our driver */
+  driver = osd_driver;
 
-   /* use custom pageclear, if necessary */
-   if (driver->clear)
-      driver->clear(GUI_BLACK);
-   else
-      bmp_clear(screen, GUI_BLACK);
+  /* re-assert dimensions, clear the surface */
+  TRACE("driver->lock_write()");
+  screen = driver->lock_write();
+  TRACE("driver->lock_write() ok");
 
-   /* release surface */
-   if (driver->free_write)
-      driver->free_write(-1, NULL);
+  /* use custom pageclear, if necessary */
+  if (driver->clear)
+    driver->clear(GUI_BLACK);
+  else
+    bmp_clear(screen, GUI_BLACK);
 
-   log_printf("video driver: %s at %dx%d\n", driver->name,
-              screen->width, screen->height);
+  TRACE("driver->clear()");
 
-   return 0;
+  /* release surface */
+  if (driver->free_write)
+    driver->free_write(-1, NULL);
+
+  TRACE("driver->free_write()");
+
+  log_printf("video driver: %s at %dx%d\n", driver->name,
+    screen->width, screen->height);
+
+  return 0;
 }
 
 /* This is the interface to the drivers, used in nofrendo.c */
 int vid_init(int width, int height, viddriver_t *osd_driver)
 {
+  TRACE("vid_init");
    if (vid_findmode(width, height, osd_driver))
    {
-      log_printf("video initialization failed for %s at %dx%d\n",
-                 osd_driver->name, width, height);
+      log_printf("video initialization failed for %s at %dx%d\n", osd_driver->name, width, height);
       return -1;
    }
 	log_printf("vid_init done\n");

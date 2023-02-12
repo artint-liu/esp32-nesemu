@@ -101,6 +101,22 @@ extern int osd_makesnapname(char *filename, int len);
 
 #endif /* !NSF_PLAYER */
 
+class OSDFile
+{
+public:
+  virtual OSDFile* OpenNextFile() = 0;
+  virtual const char* name() const = 0;
+};
+
+OSDFile* OpenDir(const char* strDir);
+
+#ifdef _WIN32
+#define TRACE(x)
+#else
+extern void MyTrace(const char*);
+#define TRACE(x) MyTrace(x)
+#endif
+
 #endif /* _OSD_H_ */
 
 /*

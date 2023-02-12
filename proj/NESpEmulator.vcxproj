@@ -245,6 +245,7 @@
     <ClCompile Include="..\src\config.cpp" />
     <ClCompile Include="..\src\console.cpp" />
     <ClCompile Include="..\src\event.cpp" />
+    <ClCompile Include="..\src\fileloading.cpp" />
     <ClCompile Include="..\src\gui.cpp" />
     <ClCompile Include="..\src\gui_elem.cpp" />
     <ClCompile Include="..\src\intro.cpp" />
