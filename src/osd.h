@@ -106,6 +106,7 @@ class OSDFile
 public:
   virtual OSDFile* OpenNextFile() = 0;
   virtual const char* name() const = 0;
+  virtual const unsigned char* ReadFile(const char* szFile) = 0;
 };
 
 OSDFile* OpenDir(const char* strDir);

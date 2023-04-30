@@ -1,37 +1,38 @@
-//#ifdef _WIN32
-//#include <stdint.h>
-//#else
-//#include <Arduino.h>
-//#endif
-//
-//#include "console.h"
-//#include "nofrendo-esp32/lcd.h"
-//
-////void LCD_Write(int x, int y, const char* text, size_t len);
-//
-//void Console::Clear()
-//{
-//    LCD_Fill(0, 0, LCD_W, LCD_H, m_crTextBk);
-//}
-//
+#ifdef _WIN32
+#include <stdint.h>
+#else
+#include <Arduino.h>
+#endif
+
+#include "console.h"
+#include "nofrendo-esp32/lcd.h"
+
+Console console;
+//void LCD_Write(int x, int y, const char* text, size_t len);
+
+void Console::Clear()
+{
+    LCD_Fill(0, 0, LCD_W, LCD_H, m_crTextBk);
+}
+
 //void Console::SetTextColor(uint16_t crText, uint16_t crBk)
 //{
 //    m_crText = crText;
 //    m_crTextBk = crBk;
 //    LCD_SetTextColor(crText, crBk);
 //}
-//
-//void Console::Outputln(const char* szText)
-//{
-//    if (m_y >= LCD_W) // 横向
-//    {
-//        Scroll(0, -16);
-//        m_y -= 16;
-//    }
-//    LCD_Write(m_x, m_y, szText, -1);
-//    m_y += 16;
-//}
-//
+
+void Console::Outputln(const char* szText)
+{
+    if (m_y >= LCD_W) // 横向
+    {
+        Scroll(0, -16);
+        m_y -= 16;
+    }
+    LCD_Write(m_x, m_y, szText, -1);
+    m_y += 16;
+}
+
 //void Console::DrawWindow(int x, int y, int w, int h)
 //{
 //    char buffer[LCD_H / 8 + 1] = {0xc9, 0xcd, 0xbb};
@@ -53,10 +54,10 @@
 //    buffer[w - 1] = 0xbc;
 //    LCD_WriteASCII(x * 8, (y + h - 1) * 16, buffer, w);
 //}
-//
-//
-//void Console::Scroll(int16_t offsetX, int16_t offsetY)
-//{
-//    LCD_Scroll(offsetY, offsetX); // 交换两个轴
-//}
-//
+
+
+void Console::Scroll(int16_t offsetX, int16_t offsetY)
+{
+    LCD_Scroll(offsetY, offsetX); // 交换两个轴
+}
+

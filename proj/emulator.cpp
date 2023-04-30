@@ -12,9 +12,11 @@
 
 #pragma comment(lib, "Shlwapi.lib")
 
+#if 0
 const unsigned char rom[] = {
 #include "rom.h"
 };
+#endif
 
 //Console console;
 
@@ -22,10 +24,12 @@ const unsigned char rom[] = {
 extern uint32 myPalette32[256];
 volatile DWORD g_dwKeyPressed = 0;
 void LCD_Write(int x, int y, const char* text, size_t len);
+#if 0
 const uint8_t* GetDefaultRom()
 {
     return rom;
 }
+#endif
 
 
 

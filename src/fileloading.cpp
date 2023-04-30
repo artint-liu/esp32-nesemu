@@ -8,20 +8,24 @@
 #endif
 #include <vector>
 #include <string>
+#include <fstream>
 #include <Artino_Menu.h>
+#include <Artino_Console.h>
 #include "nofrendo-esp32\psxcontroller.h"
 #include "console.h"
 #include "osd.h"
 #include "nofrendo-esp32\lcd.h"
 
 void LCD_SetTextColor(uint16_t c, uint16_t bk);
-//extern Console console;
+extern Console console;
 
 const uint8_t* GetDefaultRom();
 
 #define RGB16(r, g, b) (((b >> 3) << 11) | ((g >> 2) << 5) | (r >> 3))
 #define YELLOW RGB16(255, 255, 0)
 #define BLUE RGB16(0, 0, 255)
+#define WHITE RGB16(255, 255, 255)
+#define BLACK RGB16(0, 0, 0)
 //#define RGB32to16
 
 
@@ -114,6 +118,23 @@ class MyFile : public OSDFile
   {
     return wfd.cFileName;
   }
+
+  const unsigned char* ReadFile(const char* szFile)
+  {
+    std::fstream file(szFile, std::ios::in | std::ios::binary);
+    //file.open(strFile.c_str(), std::ios_base::in);
+    file.seekg(0, std::ios::end);
+    size_t size = file.tellg();
+    file.seekg(0, std::ios::beg);
+    char* pData = nullptr;
+    if (size)
+    {
+      pData = new char[size];
+      file.read(pData, size);
+    }
+    file.close();
+    return reinterpret_cast<unsigned char*>(pData);
+  }
 };
 
 MyFile file;
@@ -134,16 +155,28 @@ OSDFile* OpenDir(const char* strDir)
   return &file;
 }
 
+
+
 #else
 
 #endif
 
 
+bool IsNESFilename(const std::string& strFilename)
+{
+  auto pos = strFilename.rfind('.');
+  if (pos == std::string::npos)
+  {
+    return false;
+  }
+  return strFilename.compare(pos, 4, ".NES") == 0;
+}
+
 
 //
 const unsigned char* osd_getromdata()
 {
-#if 0
+#if 1
   console.SetTextColor(YELLOW, BLUE);
   console.Clear();
   console.Outputln("osd_getromdata");
@@ -155,12 +188,15 @@ const unsigned char* osd_getromdata()
   if (root)
   {
     OSDFile* file = root->OpenNextFile();
-    while (file)
+    while (file && files.size() < 10)
     {
       MENU_ITEM item;
       item.str = file->name();
-      files.push_back(item);
-      TRACE(file->name());
+      if (IsNESFilename(item.str))
+      {
+        files.push_back(item);
+        TRACE(file->name());
+      }
       file = root->OpenNextFile();
     }
   }
@@ -182,8 +218,11 @@ const unsigned char* osd_getromdata()
   int select = menu.Loop();
 
   TRACE("exit menu loop");
-
+  console.SetTextColor(WHITE, BLACK);
   console.Clear();
-#endif
+  return root->ReadFile(files[select].str.c_str());
+
+#else
   return GetDefaultRom();
+#endif
 }
