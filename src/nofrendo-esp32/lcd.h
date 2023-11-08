@@ -35,8 +35,11 @@ void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16
 void LCD_Scroll(int16_t offsetX, int16_t offsetY);
 
 
-#define LCD_W 240
-#define LCD_H 320
+#define LCD_HW_W 240
+#define LCD_HW_H 320
+
+#define SCREEN_W 320
+#define SCREEN_H 240
 
 //#ifdef __cplusplus
 //}

@@ -21,9 +21,11 @@ extern Console console;
 
 const uint8_t* GetDefaultRom();
 
-#define RGB16(r, g, b) (((b >> 3) << 11) | ((g >> 2) << 5) | (r >> 3))
+#define RGB16(r, g, b) (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
 #define YELLOW RGB16(255, 255, 0)
 #define BLUE RGB16(0, 0, 255)
+#define RED RGB16(255, 0, 0)
+#define GREEN RGB16(0, 255, 0)
 #define WHITE RGB16(255, 255, 255)
 #define BLACK RGB16(0, 0, 0)
 //#define RGB32to16
@@ -45,21 +47,25 @@ public:
 
   Artino::MenuKey GetKey() override
   {
-    uint32_t key = psxReadInput();
-    uint32_t dwPrevKey = m_dwPrevKey;
-    m_dwPrevKey = key;
+    while (1)
+    {
+      uint32_t key = psxReadInput();
+      uint32_t dwPrevKey = m_dwPrevKey;
+      m_dwPrevKey = key;
 
-    if ((dwPrevKey & (1 << KEYSHIFT_UP)) && (key & (1 << KEYSHIFT_UP)) == 0)
-    {
-      return Artino::MenuKey_Up;
-    }
-    else if ((dwPrevKey & (1 << KEYSHIFT_DOWN)) && (key & (1 << KEYSHIFT_DOWN)) == 0)
-    {
-      return Artino::MenuKey_Down;
-    }
-    else if ((dwPrevKey & (1 << KEYSHIFT_RIGHT)) && (key & (1 << KEYSHIFT_RIGHT)) == 0)
-    {
-      return Artino::MenuKey_Confirm;
+      if ((dwPrevKey & (1 << KEYSHIFT_UP)) && (key & (1 << KEYSHIFT_UP)) == 0)
+      {
+        return Artino::MenuKey_Up;
+      }
+      else if ((dwPrevKey & (1 << KEYSHIFT_DOWN)) && (key & (1 << KEYSHIFT_DOWN)) == 0)
+      {
+        return Artino::MenuKey_Down;
+      }
+      else if ((dwPrevKey & (1 << KEYSHIFT_RIGHT)) && (key & (1 << KEYSHIFT_RIGHT)) == 0)
+      {
+        return Artino::MenuKey_Confirm;
+      }
+      delay(10);
     }
 
     return Artino::MenuKey_None;
@@ -75,21 +81,17 @@ public:
     if (selected)
     {
       LCD_SetTextColor(BLUE, YELLOW);
+      //LCD_Fill(x, y, 320, y + 16, GREEN);
     }
     else
     {
       LCD_SetTextColor(YELLOW, BLUE);
+      //LCD_Fill(x, y, 320, y + 16, RED);
     }
     const int len = 320 / 8;
     char buffer[len];
     size_t n = pItem->str.length();
     LCD_Write(x, y, pItem->str.c_str(), -1);
-    /*if (n < len)
-    {
-      memset(buffer, 0x20, len - n);
-      buffer[len - n] = '\0';
-      LCD_Write(x + n * 8, y, buffer, -1);
-    }//*/
   }
 };
 
@@ -211,7 +213,7 @@ const unsigned char* osd_getromdata()
     while (1);
   }
 
-  Artino::RECT rect = { 0, 0, LCD_H, LCD_W };
+  Artino::RECT rect = { 0, 0, SCREEN_W, SCREEN_H };
   Menu menu(&files.front(), files.size(), &rect);
 
   TRACE("enter menu loop");

@@ -51,16 +51,16 @@ int psxReadInput();
 void LCD_Scroll(int16_t offsetX, int16_t offsetY)
 {
     int x0 = offsetX > 0 ? offsetX : 0;
-    int x1 = (LCD_W + offsetX) > LCD_W ? LCD_W : (LCD_W + offsetX);
+    int x1 = (LCD_HW_W + offsetX) > LCD_HW_W ? LCD_HW_W : (LCD_HW_W + offsetX);
 
     int y0 = offsetY > 0 ? offsetY : 0;
-    int y1 = (LCD_H + offsetY) > LCD_H ? LCD_H : (LCD_H + offsetY);
+    int y1 = (LCD_HW_H + offsetY) > LCD_HW_H ? LCD_HW_H : (LCD_HW_H + offsetY);
 
     int len = x1 - x0;
     for (int y = y0; y < y1; y++)
     {
-        int idxDst = y * LCD_W + x0;
-        int idxSrc = (y - offsetY) * LCD_W + (x0 - offsetX);
+        int idxDst = y * LCD_HW_W + x0;
+        int idxSrc = (y - offsetY) * LCD_HW_W + (x0 - offsetX);
         memcpy(g_pScreenBuffer + idxDst, g_pScreenBuffer + idxSrc, len * sizeof(DWORD));
     }
 }
@@ -68,12 +68,15 @@ void LCD_Scroll(int16_t offsetX, int16_t offsetY)
 void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16_t color)
 {
     uint32_t col = RGB16to32(color);
-    for (int y = ysta; y < yend; y++)
+    xend = xend > LCD_HW_H ? LCD_HW_H : xend;
+    yend = yend > LCD_HW_W ? LCD_HW_W : yend;
+
+    for (int y = xsta; y < xend; y++)
     {
-        int index = y * LCD_W;
-        for (int x = xsta; x < xend; x++)
+        int index = y * LCD_HW_W + ysta;
+        for (int x = ysta; x < yend; x++, index++)
         {
-            g_pScreenBuffer[index + x] = col;
+            g_pScreenBuffer[index] = col;
         }
     }
     SendMessage(g_hWnd, WM_FLUSHSCREEN, 0, 0);
@@ -91,7 +94,7 @@ void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const
                 int index = i * 256 + n;
                 if (g_pScreenBuffer)
                 {
-                    g_pScreenBuffer[(LCD_H - (n + x) - 1) * LCD_W + (i + y)] = myPalette32[data[index]];
+                    g_pScreenBuffer[(LCD_HW_H - (n + x) - 1) * LCD_HW_W + (i + y)] = myPalette32[data[index]];
                 }
             }
         }
@@ -164,9 +167,9 @@ void KeyCallback(int key, int action)
 
 void LCD_DrawPixel(uint16_t x, uint16_t y, uint16_t color)
 {
-    if (x < LCD_W && y < LCD_H)
+    if (x < LCD_HW_W && y < LCD_HW_H)
     {
-        int index = (y * LCD_W + x);
+        int index = (y * LCD_HW_W + x);
         if (g_pScreenBuffer)
         {
             g_pScreenBuffer[index] = RGB16to32(color);
@@ -191,7 +194,7 @@ void DrawChar(int x, int y, int w, int h, const uint8_t* data)
             for (int xx = 0; xx < w; xx++)
             {
                 int index = yy * w + xx;
-                LCD_DrawPixel(y + yy, LCD_H - (x + xx) - 1, (data[index >> 3] & (0x80 >> (index & 7))) ? crText : crTextBk);
+                LCD_DrawPixel(y + yy, LCD_HW_H - (x + xx) - 1, (data[index >> 3] & (0x80 >> (index & 7))) ? crText : crTextBk);
             }
         }
     }
@@ -216,11 +219,11 @@ void LCD_Write(int x, int y, const char* text, size_t len)
             continue;
         }
 
-        if (x + font.width > LCD_H)
+        if (x + font.width > LCD_HW_H)
         {
           x = 0;
           y += font.height;
-          if (y >= LCD_W)
+          if (y >= LCD_HW_W)
           {
             return;
           }
@@ -256,11 +259,11 @@ void LCD_WriteASCII(int x, int y, const char* text, size_t len)
         text += L;
         i += L;
         x += font.width;
-        if (x + 8 > LCD_H)
+        if (x + 8 > SCREEN_W)
         {
             x = 0;
             y += font.height;
-            if (y >= LCD_W)
+            if (y >= SCREEN_H)
             {
                 return;
             }

@@ -12,7 +12,7 @@ Console console;
 
 void Console::Clear()
 {
-    LCD_Fill(0, 0, LCD_W, LCD_H, m_crTextBk);
+    LCD_Fill(0, 0, SCREEN_W, SCREEN_H, m_crTextBk);
 }
 
 //void Console::SetTextColor(uint16_t crText, uint16_t crBk)
@@ -24,7 +24,7 @@ void Console::Clear()
 
 void Console::Outputln(const char* szText)
 {
-    if (m_y >= LCD_W) // 横向
+    if (m_y >= LCD_HW_W) // 横向
     {
         Scroll(0, -16);
         m_y -= 16;

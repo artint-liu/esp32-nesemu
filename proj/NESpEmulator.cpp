@@ -165,7 +165,7 @@ void Flush(const DWORD* pSource)
             for (int y = 0; y < height; y++, pSource++)
             {
                 DWORD d = *pSource;
-                d = ((d & 0xff0000) >> 16) | ((d & 0xff) << 16) | (d & 0xff00ff00);
+                //d = ((d & 0xff0000) >> 16) | ((d & 0xff) << 16) | (d & 0xff00ff00);
                 *pColor = d;
                 pColor = (DWORD*)((INT_PTR)pColor - bd.Stride);
 
