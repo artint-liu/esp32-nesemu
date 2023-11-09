@@ -38,7 +38,8 @@ struct MENU_ITEM
 
 class Menu : public Artino::Menu<MENU_ITEM>
 {
-  uint32_t m_dwPrevKey = psxReadInput();
+  uint32_t m_dwPrevKey = 0xffffffff;
+  uint32_t m_dwCurrKey = 0xffffffff;
 public:
   Menu(const MENU_ITEM* items, uint16_t count, const Artino::RECT* lprc)
     : Artino::Menu<MENU_ITEM>(items, count, 16, lprc)
@@ -47,51 +48,57 @@ public:
 
   Artino::MenuKey GetKey() override
   {
+    uint32_t time_elapse = 0;
     while (1)
     {
-      uint32_t key = psxReadInput();
-      uint32_t dwPrevKey = m_dwPrevKey;
-      m_dwPrevKey = key;
+      m_dwPrevKey = m_dwCurrKey;
+      m_dwCurrKey = psxReadInput();
 
-      if ((dwPrevKey & (1 << KEYSHIFT_UP)) && (key & (1 << KEYSHIFT_UP)) == 0)
+      if ((m_dwPrevKey & (1 << KEYSHIFT_UP)) && (m_dwCurrKey & (1 << KEYSHIFT_UP)) == 0)
       {
         return Artino::MenuKey_Up;
       }
-      else if ((dwPrevKey & (1 << KEYSHIFT_DOWN)) && (key & (1 << KEYSHIFT_DOWN)) == 0)
+      else if ((m_dwPrevKey & (1 << KEYSHIFT_DOWN)) && (m_dwCurrKey & (1 << KEYSHIFT_DOWN)) == 0)
       {
         return Artino::MenuKey_Down;
       }
-      else if ((dwPrevKey & (1 << KEYSHIFT_RIGHT)) && (key & (1 << KEYSHIFT_RIGHT)) == 0)
+      else if ((m_dwPrevKey & (1 << KEYSHIFT_RIGHT)) && (m_dwCurrKey & (1 << KEYSHIFT_RIGHT)) == 0)
       {
         return Artino::MenuKey_Confirm;
       }
+
       delay(10);
+      time_elapse += 10;
+      if (time_elapse > 150 && m_dwPrevKey != 0xffffffff)
+      {
+        time_elapse = 0;
+        m_dwCurrKey = 0xffffffff;
+      }
     }
 
     return Artino::MenuKey_None;
   }
 
-  //void OnBeginDrawItem() override
-  //{
-  //  LCD_Fill(0, 0, LCD_H, LCD_W, BLUE);
-  //}
-
   void OnDrawItem(int16_t x, int16_t y, const MENU_ITEM* pItem, bool selected) override
   {
+    uint16_t clrBackground;
     if (selected)
     {
       LCD_SetTextColor(BLUE, YELLOW);
-      //LCD_Fill(x, y, 320, y + 16, GREEN);
+      clrBackground = YELLOW;
     }
     else
     {
       LCD_SetTextColor(YELLOW, BLUE);
-      //LCD_Fill(x, y, 320, y + 16, RED);
+      clrBackground = BLUE;
     }
-    const int len = 320 / 8;
-    char buffer[len];
+
     size_t n = pItem->str.length();
-    LCD_Write(x, y, pItem->str.c_str(), -1);
+    uint32_t xy_pos = LCD_Write(x, y, pItem->str.c_str(), -1);
+    if ((xy_pos >> 16) == y)
+    {
+      LCD_Fill(xy_pos & 0xffff, y, 320, y + 16, clrBackground);
+    }
   }
 };
 
@@ -101,11 +108,11 @@ class MyFile : public OSDFile
 {
   friend OSDFile* OpenDir(const char* strDir);
   HANDLE hFind = NULL;
-  WIN32_FIND_DATAA wfd = {0};
+  WIN32_FIND_DATA wfd = {0};
 
   OSDFile* OpenNextFile() override
   {
-    BOOL result = FindNextFileA(hFind, &wfd);
+    BOOL result = FindNextFile(hFind, &wfd);
     if (!result)
     {
       FindClose(hFind);
@@ -118,7 +125,10 @@ class MyFile : public OSDFile
 
   const char* name() const override
   {
-    return wfd.cFileName;
+    static CHAR buffer[1024];
+    //lstrcpyn(buffer, wfd.cFileName, sizeof(buffer) / sizeof(buffer[0]));
+    WideCharToMultiByte(CP_UTF8, 0, wfd.cFileName, -1, buffer, sizeof(buffer) / sizeof(buffer[0]), nullptr, nullptr);
+    return buffer;
   }
 
   const unsigned char* ReadFile(const char* szFile)
@@ -148,16 +158,14 @@ OSDFile* OpenDir(const char* strDir)
     FindClose(file.hFind);
   }
 
-  char buffer[MAX_PATH];
+  WCHAR buffer[MAX_PATH];
   //memset(&file, 0, sizeof(MyFile));
-  GetCurrentDirectoryA(MAX_PATH, buffer);
-  PathCombineA(buffer, buffer, "*");
+  GetCurrentDirectory(MAX_PATH, buffer);
+  PathCombine(buffer, buffer, L"*");
 
-  file.hFind = FindFirstFileA(buffer, &file.wfd);
+  file.hFind = FindFirstFile(buffer, &file.wfd);
   return &file;
 }
-
-
 
 #else
 
@@ -182,6 +190,7 @@ const unsigned char* osd_getromdata()
   console.SetTextColor(YELLOW, BLUE);
   console.Clear();
   console.Outputln("osd_getromdata");
+  console.Outputln(R"(加载文件列表...)");
   delay(1000);
   //console.DrawWindow(0, 0, 40, 15);
   OSDFile* root = OpenDir("/");
@@ -190,14 +199,14 @@ const unsigned char* osd_getromdata()
   if (root)
   {
     OSDFile* file = root->OpenNextFile();
-    while (file && files.size() < 10)
+    while (file/* && files.size() < 10*/)
     {
       MENU_ITEM item;
       item.str = file->name();
       if (IsNESFilename(item.str))
       {
         files.push_back(item);
-        TRACE(file->name());
+        //TRACE(file->name());
       }
       file = root->OpenNextFile();
     }

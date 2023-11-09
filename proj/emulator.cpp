@@ -23,7 +23,7 @@ const unsigned char rom[] = {
 
 extern uint32 myPalette32[256];
 volatile DWORD g_dwKeyPressed = 0;
-void LCD_Write(int x, int y, const char* text, size_t len);
+uint32_t LCD_Write(int x, int y, const char* text, size_t len);
 #if 0
 const uint8_t* GetDefaultRom()
 {
@@ -71,7 +71,10 @@ void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16
     xend = xend > LCD_HW_H ? LCD_HW_H : xend;
     yend = yend > LCD_HW_W ? LCD_HW_W : yend;
 
-    for (int y = xsta; y < xend; y++)
+    xsta = LCD_HW_H - xsta;
+    xend = LCD_HW_H - xend;
+
+    for (int y = xend; y < xsta; y++)
     {
         int index = y * LCD_HW_W + ysta;
         for (int x = ysta; x < yend; x++, index++)
@@ -115,7 +118,7 @@ void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const
 
 void LCD_Init()
 {
-  Artint_HZK::hzk16.encoding = Artint_HZK::TextEncoding::GB2312;
+  //Artint_HZK::hzk16.encoding = Artint_HZK::TextEncoding::GB2312;
 }
 
 int psxReadInput()
@@ -200,7 +203,7 @@ void DrawChar(int x, int y, int w, int h, const uint8_t* data)
     }
 }
 
-void LCD_Write(int x, int y, const char* text, size_t len)
+uint32_t LCD_Write(int x, int y, const char* text, size_t len)
 {
     Artint_HZK::BITMAPFONT font = { 0 };
 
@@ -208,7 +211,7 @@ void LCD_Write(int x, int y, const char* text, size_t len)
     {
         if (*text == '\0')
         {
-            return;
+            break;
         }
 
         int8_t L = Artint_HZK::hzk16.Query(text, len - i, &font);
@@ -225,7 +228,7 @@ void LCD_Write(int x, int y, const char* text, size_t len)
           y += font.height;
           if (y >= LCD_HW_W)
           {
-            return;
+            break;
           }
         }
 
@@ -234,6 +237,7 @@ void LCD_Write(int x, int y, const char* text, size_t len)
         i += L;
         x += font.width;
     }
+    return (x | (y << 16));
 }
 
 void LCD_WriteASCII(int x, int y, const char* text, size_t len)

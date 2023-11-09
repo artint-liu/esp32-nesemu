@@ -290,18 +290,13 @@ static void videoTask(void *arg)
   while (1) {
     if (useQueue)
     {
-      //TRACE("xQueueReceive vidQueue"); 
       xQueueReceive(vidQueue, &bmp, portMAX_DELAY);//skip one frame to drop to 30
-      //TRACE("xQueueReceive vidQueue ok");
       LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp->data);
-      //TRACE("LCD_Display ok");
     }
     else
     {
       delay(33);
-      //TRACE("LCD_Display");
       LCD_Display(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, (const uint8_t*)bmp ? bmp->data : NULL);
-      //TRACE("LCD_Display ok");
     }
   }
 }

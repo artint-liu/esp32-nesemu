@@ -29,7 +29,7 @@
 void LCD_Init();
 void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const uint8_t *data);
 void LCD_SetTextColor(uint16_t c, uint16_t bk);
-void LCD_Write(int x, int y, const char* text, size_t len);
+uint32_t LCD_Write(int x, int y, const char* text, size_t len);
 void LCD_WriteASCII(int x, int y, const char* text, size_t len);
 void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16_t color);
 void LCD_Scroll(int16_t offsetX, int16_t offsetY);
