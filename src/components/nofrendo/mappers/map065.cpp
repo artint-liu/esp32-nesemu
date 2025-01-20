@@ -95,7 +95,7 @@ static void map65_write(uint32 address, uint8 value)
 static map_memwrite map65_memwrite[] =
 {
    { 0x8000, 0xFFFF, map65_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map65_intf =

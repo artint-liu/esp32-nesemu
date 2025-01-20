@@ -153,7 +153,7 @@ static void map42_getstate (SnssMapperBlock *state)
 static map_memwrite map42_memwrite [] =
 {
    { 0xE000, 0xFFFF, map42_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map42_intf =

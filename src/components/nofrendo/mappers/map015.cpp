@@ -92,7 +92,7 @@ static void map15_init(void)
 static map_memwrite map15_memwrite[] =
 {
    { 0x8000, 0xFFFF, map15_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map15_intf =

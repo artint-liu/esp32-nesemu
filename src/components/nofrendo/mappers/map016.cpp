@@ -133,7 +133,7 @@ static map_memwrite map16_memwrite[] =
    { 0x6000, 0x600D, map16_write },
    { 0x7FF0, 0x7FFD, map16_write },
    { 0x8000, 0x800D, map16_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map16_intf = 

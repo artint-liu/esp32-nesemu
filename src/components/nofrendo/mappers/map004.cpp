@@ -196,7 +196,7 @@ static void map4_init(void)
 static map_memwrite map4_memwrite[] =
 {
    { 0x8000, 0xFFFF, map4_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map4_intf =

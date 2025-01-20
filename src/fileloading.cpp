@@ -133,19 +133,25 @@ class MyFile : public OSDFile
 
   const unsigned char* ReadFile(const char* szFile)
   {
-    std::fstream file(szFile, std::ios::in | std::ios::binary);
-    //file.open(strFile.c_str(), std::ios_base::in);
-    file.seekg(0, std::ios::end);
-    size_t size = file.tellg();
-    file.seekg(0, std::ios::beg);
-    char* pData = nullptr;
-    if (size)
-    {
-      pData = new char[size];
-      file.read(pData, size);
-    }
-    file.close();
-    return reinterpret_cast<unsigned char*>(pData);
+      //char strFileAnsi[MAX_PATH];
+      WCHAR szFileWide[MAX_PATH];
+      int len = MultiByteToWideChar(CP_UTF8, 0, szFile, strlen(szFile), szFileWide, sizeof(szFileWide));
+      szFileWide[len] = L'\0';
+      //WideCharToMultiByte(CP_, 0, wfd.cFileName, -1, buffer, sizeof(buffer) / sizeof(buffer[0]), nullptr, nullptr);
+
+      std::fstream file(szFileWide, std::ios::in | std::ios::binary);
+      //file.open(strFile.c_str(), std::ios_base::in);
+      file.seekg(0, std::ios::end);
+      size_t size = file.tellg();
+      file.seekg(0, std::ios::beg);
+      char* pData = nullptr;
+      if (size)
+      {
+          pData = new char[size];
+          file.read(pData, size);
+      }
+      file.close();
+      return reinterpret_cast<unsigned char*>(pData);
   }
 };
 
@@ -184,56 +190,58 @@ bool IsNESFilename(const std::string& strFilename)
 
 
 //
-const unsigned char* osd_getromdata()
+const unsigned char* osd_getromdata(const char* filename)
 {
-#if 1
-  console.SetTextColor(YELLOW, BLUE);
-  console.Clear();
-  console.Outputln("osd_getromdata");
-  console.Outputln(R"(加载文件列表...)");
-  delay(1000);
-  //console.DrawWindow(0, 0, 40, 15);
-  OSDFile* root = OpenDir("/");
-
-  std::vector<MENU_ITEM> files;
-  if (root)
-  {
-    OSDFile* file = root->OpenNextFile();
-    while (file/* && files.size() < 10*/)
+    if (!filename)
     {
-      MENU_ITEM item;
-      item.str = file->name();
-      if (IsNESFilename(item.str))
-      {
-        files.push_back(item);
-        //TRACE(file->name());
-      }
-      file = root->OpenNextFile();
+        return GetDefaultRom();
     }
-  }
+    else
+    {
+        console.SetTextColor(YELLOW, BLUE);
+        console.Clear();
+        console.Outputln("osd_getromdata");
+        console.Outputln(R"(加载文件列表...)");
+        delay(1000);
+        //console.DrawWindow(0, 0, 40, 15);
+        OSDFile* root = OpenDir("/");
 
-  TRACE("generate file list [OK]");
+        std::vector<MENU_ITEM> files;
+        if (root)
+        {
+            OSDFile* file = root->OpenNextFile();
+            while (file/* && files.size() < 10*/)
+            {
+                MENU_ITEM item;
+                item.str = file->name();
+                if (IsNESFilename(item.str))
+                {
+                    files.push_back(item);
+                    //TRACE(file->name());
+                }
+                file = root->OpenNextFile();
+            }
+        }
 
- 
-  if (files.empty())
-  {
-    TRACE("empty file list");
-    console.Outputln("empty file list");
-    while (1);
-  }
+        TRACE("generate file list [OK]");
 
-  Artino::RECT rect = { 0, 0, SCREEN_W, SCREEN_H };
-  Menu menu(&files.front(), files.size(), &rect);
 
-  TRACE("enter menu loop");
-  int select = menu.Loop();
+        if (files.empty())
+        {
+            TRACE("empty file list");
+            console.Outputln("empty file list");
+            while (1);
+        }
 
-  TRACE("exit menu loop");
-  console.SetTextColor(WHITE, BLACK);
-  console.Clear();
-  return root->ReadFile(files[select].str.c_str());
+        Artino::RECT rect = { 0, 0, SCREEN_W, SCREEN_H };
+        Menu menu(&files.front(), files.size(), &rect);
 
-#else
-  return GetDefaultRom();
-#endif
+        TRACE("enter menu loop");
+        int select = menu.Loop();
+
+        TRACE("exit menu loop");
+        console.SetTextColor(WHITE, BLACK);
+        console.Clear();
+        return root->ReadFile(files[select].str.c_str());
+    }
 }

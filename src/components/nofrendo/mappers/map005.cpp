@@ -251,13 +251,13 @@ static map_memwrite map5_memwrite[] =
    /* $5000 - $5015 handled by sound */
    { 0x5016, 0x5FFF, map5_write },
    { 0x8000, 0xFFFF, map5_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 static map_memread map5_memread[] = 
 {
    { 0x5204, 0x5204, map5_read },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map5_intf =

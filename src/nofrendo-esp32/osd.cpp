@@ -35,11 +35,11 @@
 char configfilename[]="na";
 
 /* This is os-specific part of main() */
-int osd_main(void*)
+int osd_main(const char* filename)
 {
    config.filename = configfilename;
 
-   return main_loop("rom", system_autodetect);
+   return main_loop(filename, system_autodetect);
 }
 
 /* File system interface */

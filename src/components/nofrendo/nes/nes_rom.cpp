@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #endif
 
-extern const unsigned char *osd_getromdata();
+extern const unsigned char *osd_getromdata(const char* filename);
 
 /* Max length for displayed filename */
 #define  ROM_DISP_MAXLEN   20
@@ -441,7 +441,7 @@ char *rom_getinfo(rominfo_t *rominfo)
 /* Load a ROM image into memory */
 rominfo_t *rom_load(const char *filename)
 {
-   unsigned char *rom=(unsigned char*)osd_getromdata();
+   unsigned char *rom = (unsigned char*)osd_getromdata(filename);
    rominfo_t *rominfo;
 
    rominfo = (rominfo_t*)malloc(sizeof(rominfo_t));

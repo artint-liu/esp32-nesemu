@@ -118,7 +118,7 @@ static map_memwrite map19_memwrite[] =
 {
    { 0x5000, 0x5FFF, map19_write },
    { 0x8000, 0xFFFF, map19_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map19_intf =

@@ -36,7 +36,7 @@ typedef enum
    NUM_SUPPORTED_SYSTEMS
 } system_t;
 
-int nofrendo_main(int argc, char *argv[]);
+int nofrendo_main(int argc, const char *argv[]);
 
 extern volatile int nofrendo_ticks; /* system timer ticks */
 

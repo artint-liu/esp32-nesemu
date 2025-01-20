@@ -44,7 +44,7 @@ static void map11_init(void)
 static map_memwrite map11_memwrite[] =
 {
    { 0x8000, 0xFFFF, map11_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map11_intf =

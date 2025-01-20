@@ -138,7 +138,7 @@ static void map9_setstate(SnssMapperBlock *state)
 static map_memwrite map9_memwrite[] =
 {
    { 0x8000, 0xFFFF, map9_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map9_intf =

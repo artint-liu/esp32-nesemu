@@ -358,7 +358,7 @@ static int mmc5_init(void)
 static apu_memread mmc5_memread[] =
 {
    { 0x5205, 0x5206, mmc5_read },
-   {     -1,     -1, NULL }
+   { (uint32)-1, (uint32)-1, NULL }
 };
 
 static apu_memwrite mmc5_memwrite[] =
@@ -366,7 +366,7 @@ static apu_memwrite mmc5_memwrite[] =
    { 0x5000, 0x5015, mmc5_write },
    { 0x5114, 0x5115, mmc5_write },
    { 0x5205, 0x5206, mmc5_write },
-   {     -1,     -1, NULL }
+   { (uint32)-1, (uint32)-1, NULL }
 };
 
 apuext_t mmc5_ext =

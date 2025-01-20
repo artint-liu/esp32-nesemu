@@ -58,7 +58,7 @@ static void fds_reset(void)
 static apu_memwrite fds_memwrite[] =
 {
    { 0x4040, 0x4092, fds_write }, 
-   {     -1,     -1, NULL }
+   {(uint32)-1, (uint32)-1, NULL }
 };
 
 apuext_t fds_ext = 

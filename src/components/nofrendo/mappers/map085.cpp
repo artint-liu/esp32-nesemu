@@ -153,7 +153,7 @@ static void map85_hblank(int vblank)
 static map_memwrite map85_memwrite[] =
 {
    { 0x8000, 0xFFFF, map85_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 static void map85_init(void)

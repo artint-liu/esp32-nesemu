@@ -322,19 +322,19 @@ static void vrc_hblank(int vblank)
 static map_memwrite map21_memwrite[] =
 {
    { 0x8000, 0xFFFF, map21_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 static map_memwrite map22_memwrite[] =
 {
    { 0x8000, 0xFFFF, map22_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 static map_memwrite map23_memwrite[] =
 {
    { 0x8000, 0xFFFF, map23_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 static void map21_getstate(SnssMapperBlock *state)

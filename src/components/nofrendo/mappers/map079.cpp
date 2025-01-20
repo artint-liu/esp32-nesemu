@@ -45,7 +45,7 @@ static void map79_init(void)
 static map_memwrite map79_memwrite[] =
 {
    { 0x4100, 0x5FFF, map79_write }, /* ????? incorrect range ??? */
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map79_intf =

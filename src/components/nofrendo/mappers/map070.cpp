@@ -60,7 +60,7 @@ static void map70_write(uint32 address, uint8 value)
 static map_memwrite map70_memwrite[] =
 {
    { 0x8000, 0xFFFF, map70_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map70_intf =

@@ -50,7 +50,7 @@ static void map34_write(uint32 address, uint8 value)
 static map_memwrite map34_memwrite[] = 
 {
    { 0x7FFD, 0xFFFF, map34_write },
-   { -1, -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map34_intf = 

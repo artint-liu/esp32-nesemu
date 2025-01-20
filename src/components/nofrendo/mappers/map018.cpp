@@ -143,7 +143,7 @@ static void map18_write(uint32 address, uint8 value)
 static map_memwrite map18_memwrite[] =
 {
    { 0x8000, 0xFFFF, map18_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 static void map18_getstate(SnssMapperBlock *state)

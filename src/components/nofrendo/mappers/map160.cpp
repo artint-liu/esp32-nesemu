@@ -106,7 +106,7 @@ static void map160_init(void)
 static map_memwrite map160_memwrite[] =
 {
    { 0x8000, 0xFFFF, map160_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map160_intf =

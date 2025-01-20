@@ -27,7 +27,7 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 Bitmap* g_pScreen = NULL;
 HWND g_hWnd;
 
-int nofrendo_main(int argc, char* argv[]);
+int nofrendo_main(int argc, const char* argv[]);
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter);
 void KeyCallback(int key, int action);
 DWORD g_idThread = 0;
@@ -180,7 +180,8 @@ void Flush(const DWORD* pSource)
 
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter)
 {
-    nofrendo_main(0, NULL);
+    const char* argv[] = {"rom"};
+    nofrendo_main(1, argv);
     return 0;
 }
 

@@ -79,7 +79,7 @@ static void map229_write (uint32 address, uint8 value)
 static map_memwrite map229_memwrite [] =
 {
    { 0x8000, 0xFFFF, map229_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map229_intf =

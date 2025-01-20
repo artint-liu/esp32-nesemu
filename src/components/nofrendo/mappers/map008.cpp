@@ -45,7 +45,7 @@ static void map8_init(void)
 static map_memwrite map8_memwrite[] =
 {
    { 0x8000, 0xFFFF, map8_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map8_intf =

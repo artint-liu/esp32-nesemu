@@ -37,7 +37,7 @@ static void map2_write(uint32 address, uint8 value)
 static map_memwrite map2_memwrite[] =
 {
    { 0x8000, 0xFFFF, map2_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map2_intf =

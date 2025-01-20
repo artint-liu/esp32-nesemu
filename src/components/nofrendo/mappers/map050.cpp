@@ -157,7 +157,7 @@ static void map50_getstate (SnssMapperBlock *state)
 static map_memwrite map50_memwrite [] =
 {
    { 0x4000, 0x5FFF, map50_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map50_intf =

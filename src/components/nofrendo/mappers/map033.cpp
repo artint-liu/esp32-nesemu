@@ -90,7 +90,7 @@ static void map33_write(uint32 address, uint8 value)
 static map_memwrite map33_memwrite[] =
 {
    { 0x8000, 0xFFFF, map33_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map33_intf =

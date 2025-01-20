@@ -111,7 +111,7 @@ static uint8 read_protect(uint32 address)
    return 0xFF;
 }
 
-#define  LAST_MEMORY_HANDLER  { -1, -1, NULL }
+#define  LAST_MEMORY_HANDLER  { (uint32)-1, (uint32)-1, NULL }
 /* read/write handlers for standard NES */
 static nes6502_memread default_readhandler[] =
 {

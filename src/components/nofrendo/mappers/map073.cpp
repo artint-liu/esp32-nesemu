@@ -138,7 +138,7 @@ static void map73_getstate (SnssMapperBlock *state)
 static map_memwrite map73_memwrite [] =
 {
    { 0x8000, 0xFFFF, map73_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map73_intf =

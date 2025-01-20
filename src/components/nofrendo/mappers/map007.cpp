@@ -47,7 +47,7 @@ static void map7_init(void)
 static map_memwrite map7_memwrite[] =
 {
    { 0x8000, 0xFFFF, map7_write },
-   {     -1,     -1, NULL }
+   MAP_MEMWRITE_END
 };
 
 mapintf_t map7_intf =

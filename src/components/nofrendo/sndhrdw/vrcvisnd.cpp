@@ -203,7 +203,7 @@ static apu_memwrite vrcvi_memwrite[] =
    { 0x9000, 0x9002, vrcvi_write }, /* vrc6 */
    { 0xA000, 0xA002, vrcvi_write },
    { 0xB000, 0xB002, vrcvi_write },
-   {     -1,     -1, NULL }
+   { (uint32)- 1, (uint32)-1, NULL }
 };
 
 apuext_t vrcvi_ext =

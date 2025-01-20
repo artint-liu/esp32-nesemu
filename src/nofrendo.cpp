@@ -208,7 +208,7 @@ void main_insert(const char *filename, system_t type)
    main_eject();
 }
 
-int nofrendo_main(int argc, char *argv[])
+int nofrendo_main(int argc, const char *argv[])
 {
 //#ifdef _WIN32
 //    FreeRTOS_main();
@@ -225,9 +225,7 @@ int nofrendo_main(int argc, char *argv[])
       return -1;
 
    event_init();
-
-
-   return osd_main(nullptr);
+   return osd_main(argc > 0 ? argv[0] : nullptr);
 }
 
 /* This is the final leg of main() */

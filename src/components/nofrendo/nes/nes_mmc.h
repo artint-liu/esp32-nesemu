@@ -43,6 +43,8 @@ typedef struct
    void (*write_func)(uint32 address, uint8 value);
 } map_memwrite;
 
+#define MAP_MEMWRITE_END { (uint32)-1, (uint32)-1, NULL }
+
 
 typedef struct mapintf_s
 {
