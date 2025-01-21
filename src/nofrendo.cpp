@@ -157,7 +157,7 @@ static int internal_insert(const char *filename, system_t type)
    if (system_autodetect == type)
       type = detect_systemtype(filename);
 
-   console.filename = strdup(filename);
+   console.filename = filename ? strdup(filename) : nullptr;
    console.type = type;
 
    /* set up the event system for this system type */
@@ -259,7 +259,7 @@ int main_loop(const char *filename, system_t type)
 
    TRACE("vid_init done\n");
 
-   console.nextfilename = strdup(filename);
+   console.nextfilename = filename ? strdup(filename) : nullptr;
    console.nexttype = type;
 
    while (false == console.quit)

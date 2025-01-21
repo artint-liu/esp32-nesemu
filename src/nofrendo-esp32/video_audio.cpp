@@ -84,7 +84,11 @@ static void (*audio_callback)(void *buffer, int length) = NULL;
 #if CONFIG_SOUND_ENA
 QueueHandle_t queue;
 static uint16_t *audio_frame;
+#else
+static uint16_t* audio_frame;
 #endif
+
+void I2S_PlaySound(uint16_t*, size_t len);
 
 static void do_audio_frame() {
 
@@ -102,8 +106,24 @@ static void do_audio_frame() {
 		i2s_write_bytes(0, audio_frame, 4*n, portMAX_DELAY);
 		left-=n;
 	}
+#else
+	int left = DEFAULT_SAMPLERATE / NES_REFRESH_RATE;
+	while (left) {
+		int n = DEFAULT_FRAGSIZE;
+		if (n > left) n = left;
+		audio_callback(audio_frame, n); //get more data
+		//16 bit mono -> 32-bit (16 bit r+l)
+		for (int i = n - 1; i >= 0; i--) {
+			audio_frame[i * 2 + 1] = audio_frame[i];
+			audio_frame[i * 2] = audio_frame[i];
+		}
+		//i2s_write_bytes(0, audio_frame, 4 * n, portMAX_DELAY);
+		I2S_PlaySound(audio_frame, 4 * n);
+		left -= n;
+	}
 #endif
 }
+
 
 void osd_setsound(void (*playfunc)(void *buffer, int length))
 {
@@ -139,11 +159,11 @@ static int osd_init_sound(void)
 	//ToDo: still needed now I2S supports set_dac_mode?
 	CLEAR_PERI_REG_MASK(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_DAC_XPD_FORCE_M);
 	CLEAR_PERI_REG_MASK(RTC_IO_PAD_DAC1_REG, RTC_IO_PDAC1_XPD_DAC_M);
-
+#else
+	audio_frame = (uint16_t*)malloc(4 * DEFAULT_FRAGSIZE);
 #endif
 
 	audio_callback = NULL;
-
 	return 0;
 }
 

@@ -12,7 +12,7 @@
 
 #pragma comment(lib, "Shlwapi.lib")
 
-#if 0
+#if 1
 const unsigned char rom[] = {
 #include "rom.h"
 };
@@ -121,6 +121,11 @@ void LCD_Init()
 {
   //Artint_HZK::hzk16.encoding = Artint_HZK::TextEncoding::GB2312;
 }
+
+void I2S_PlaySound(uint16_t* data, size_t len)
+{
+}
+
 
 int psxReadInput()
 {
