@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 #include <Artino_Menu.h>
 #include "NESpEmulator.h"
@@ -50,7 +51,7 @@ public:
             {
                 return Artino::MenuKey_Down;
             }
-            else if ((m_dwPrevKey & (1 << KEYSHIFT_RIGHT)) && (m_dwCurrKey & (1 << KEYSHIFT_RIGHT)) == 0)
+            else if ((m_dwPrevKey & (1 << KEYSHIFT_START)) && (m_dwCurrKey & (1 << KEYSHIFT_START)) == 0)
             {
                 return Artino::MenuKey_Confirm;
             }
@@ -107,6 +108,13 @@ size_t GetFileList(std::vector<std::string>& list)
     {
         do
         {
+            std::wstring strExtension = PathFindExtension(wfd.cFileName);
+            std::transform(strExtension.begin(), strExtension.end(), strExtension.begin(), ::tolower);
+            if (strExtension != L".nes")
+            {
+                continue;
+            }
+            
             char strFilenameUtf8[MAX_PATH];
             WideCharToMultiByte(CP_UTF8, 0, wfd.cFileName, -1, strFilenameUtf8, sizeof(strFilenameUtf8), nullptr, nullptr);
             list.push_back(strFilenameUtf8);
