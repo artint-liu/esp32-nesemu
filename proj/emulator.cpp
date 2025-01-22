@@ -36,18 +36,6 @@ const uint8_t* GetDefaultRom()
 
 int psxReadInput();
 
-//class FileList
-//{
-//    BOOL OpenDir(const char* szDir)
-//    {
-//        FindFirstFile()
-//    }
-//
-//    BOOL Next()
-//    {
-//
-//    }
-//};
 
 void LCD_Scroll(int16_t offsetX, int16_t offsetY)
 {
@@ -119,7 +107,6 @@ void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const
 
 void LCD_Init()
 {
-  //Artint_HZK::hzk16.encoding = Artint_HZK::TextEncoding::GB2312;
 }
 
 void I2S_PlaySound(uint16_t* data, size_t len)

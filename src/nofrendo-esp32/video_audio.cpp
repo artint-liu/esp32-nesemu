@@ -405,8 +405,8 @@ int osd_init()
 		return -1;
 	TRACE("osd_init_sound ok");
 
-	LCD_Init();
-	TRACE("LCD_Init ok");
+	//LCD_Init();
+	//TRACE("LCD_Init ok");
 
 	//LCD_Display(0,0,320,240, NULL);
 

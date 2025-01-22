@@ -253,12 +253,12 @@
     <ClCompile Include="..\src\memguard.cpp" />
     <ClCompile Include="..\src\nofrendo-esp32\osd.cpp" />
     <ClCompile Include="..\src\nofrendo-esp32\psxcontroller.c" />
-    <ClCompile Include="..\src\nofrendo-esp32\spi_lcd.c" />
     <ClCompile Include="..\src\nofrendo-esp32\video_audio.cpp" />
     <ClCompile Include="..\src\nofrendo.cpp" />
     <ClCompile Include="..\src\pcx.cpp" />
     <ClCompile Include="..\src\vid_drv.cpp" />
     <ClCompile Include="emulator.cpp" />
+    <ClCompile Include="FileList.cpp" />
     <ClCompile Include="freertos\FreeRTOS.cpp" />
     <ClCompile Include="NESpEmulator.cpp" />
   </ItemGroup>

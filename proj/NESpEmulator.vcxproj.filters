@@ -247,9 +247,6 @@
     <ClCompile Include="..\src\nofrendo-esp32\psxcontroller.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\nofrendo-esp32\spi_lcd.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\nofrendo-esp32\video_audio.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -399,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="..\src\fileloading.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="FileList.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

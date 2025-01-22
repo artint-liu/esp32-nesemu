@@ -6,6 +6,7 @@
 //#include "Emulator.h"
 #include <shellapi.h>
 #include <stdio.h>
+#include <string>
 
 #define MAX_LOADSTRING 100
 #define SAFE_DELETE(p) if(p) { delete p; p = NULL; }
@@ -30,6 +31,8 @@ HWND g_hWnd;
 int nofrendo_main(int argc, const char* argv[]);
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter);
 void KeyCallback(int key, int action);
+std::string& BrowseFile(std::string & strFilepath);
+
 DWORD g_idThread = 0;
 DWORD* g_pScreenBuffer = NULL;
 
@@ -90,8 +93,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     //Emulator emulator(buffer);
     //emulator.init();
 
-    HANDLE hThread = CreateThread(NULL, 0, GameboyProc, NULL, 0, &g_idThread);
-    CloseHandle(hThread);
 
     // 初始化全局字符串
     //LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -104,6 +105,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
+
+    HANDLE hThread = CreateThread(NULL, 0, GameboyProc, NULL, 0, &g_idThread);
+    CloseHandle(hThread);
 
     //SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)&emulator);
 
@@ -178,10 +182,21 @@ void Flush(const DWORD* pSource)
     InvalidateRect(g_hWnd, NULL, FALSE);
 }
 
+
 DWORD WINAPI GameboyProc(LPVOID lpThreadParameter)
 {
     const char* argv[] = {"rom"};
-    nofrendo_main(1, argv);
+    std::string strFilepath;
+    BrowseFile(strFilepath);
+    if (strFilepath.empty())
+    {
+        nofrendo_main(0, nullptr);
+    }
+    else
+    {
+        argv[0] = strFilepath.c_str();
+        nofrendo_main(1, argv);
+    }
     return 0;
 }
 
@@ -240,36 +255,9 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow)
    return hWnd;
 }
 
-//
-//  函数: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  目标: 处理主窗口的消息。
-//
-//  WM_COMMAND  - 处理应用程序菜单
-//  WM_PAINT    - 绘制主窗口
-//  WM_DESTROY  - 发送退出消息并返回
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) {
-    // case WM_COMMAND:
-    //     {
-    //         int wmId = LOWORD(wParam);
-    //         // 分析菜单选择:
-    //         switch (wmId)
-    //         {
-    //         case IDM_ABOUT:
-    //             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-    //             break;
-    //         case IDM_EXIT:
-    //             DestroyWindow(hWnd);
-    //             break;
-    //         default:
-    //             return DefWindowProc(hWnd, message, wParam, lParam);
-    //         }
-    //     }
-    //     break;
     case WM_KEYDOWN:
     {
       //Emulator* pEmulator = reinterpret_cast<Emulator*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
