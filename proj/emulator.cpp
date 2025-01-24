@@ -74,17 +74,20 @@ void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16
     SendMessage(g_hWnd, WM_FLUSHSCREEN, 0, 0);
 }
 
-void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const uint8_t* data)
+void LCD_Display(int16_t x, int16_t y, uint16_t width, uint16_t height, const uint8_t* data)
 {
     if (data)
     {
 #if 1
+        //height = height < LCD_HW_H ? height : LCD_HW_H;
+        //width = width < LCD_HW_W ? width : LCD_HW_W;
+
         for (int i = 0; i < height; i++)
         {
             for (int n = 0; n < width; n++)
             {
-                int index = i * 256 + n;
-                if (g_pScreenBuffer)
+                int index = ((y < 0 ? -y : 0) + i) * 256 + n;
+                if (g_pScreenBuffer && (i + y) >= 0 && (n + x) >= 0 && (i + y) < LCD_HW_W && (n + x) < LCD_HW_H)
                 {
                     g_pScreenBuffer[(LCD_HW_H - (n + x) - 1) * LCD_HW_W + (i + y)] = myPalette32[data[index]];
                 }

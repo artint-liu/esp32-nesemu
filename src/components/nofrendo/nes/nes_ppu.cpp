@@ -722,7 +722,8 @@ static void ppu_renderbg(uint8 *vidbuf)
    refresh_vaddr = 0x2000 + (ppu.vaddr & 0x0FE0); /* mask out x tile */
    x_tile = ppu.vaddr & 0x1F;
    y_tile = (ppu.vaddr >> 5) & 0x1F; /* to simplify calculations */
-   bg_offset = ((ppu.vaddr >> 12) & 7) + ppu.bg_base; /* offset in y tile */
+   const uint32 yoffset = ((ppu.vaddr >> 12) & 7);
+   bg_offset = yoffset + ppu.bg_base; /* offset in y tile */
 
    /* calculate initial values */
    tile_ptr = &PPU_MEM(refresh_vaddr + x_tile); /* pointer to tile index */

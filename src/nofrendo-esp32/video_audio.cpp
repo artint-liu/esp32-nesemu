@@ -86,6 +86,7 @@ QueueHandle_t queue;
 static uint16_t *audio_frame;
 #else
 static uint16_t* audio_frame;
+uint8_t volume = 4; // 0:静音, 1:25%音量, 2:50%音量, 3:75%音量, 4:100%音量
 #endif
 
 void I2S_PlaySound(uint16_t*, size_t len);
@@ -107,19 +108,36 @@ static void do_audio_frame() {
 		left-=n;
 	}
 #else
-	int left = DEFAULT_SAMPLERATE / NES_REFRESH_RATE;
-	while (left) {
-		int n = DEFAULT_FRAGSIZE;
-		if (n > left) n = left;
-		audio_callback(audio_frame, n); //get more data
-		//16 bit mono -> 32-bit (16 bit r+l)
-		for (int i = n - 1; i >= 0; i--) {
-			audio_frame[i * 2 + 1] = audio_frame[i];
-			audio_frame[i * 2] = audio_frame[i];
+	if (volume > 0)
+	{
+		int left = DEFAULT_SAMPLERATE / NES_REFRESH_RATE;
+		while (left) {
+			int n = DEFAULT_FRAGSIZE;
+			if (n > left) n = left;
+			audio_callback(audio_frame, n); //get more data
+			//16 bit mono -> 32-bit (16 bit r+l)
+
+			for (int i = n - 1; i >= 0; i--) {
+				uint16_t v = audio_frame[i];
+				switch (volume)
+				{
+				case 1: // 25%
+					v = v >> 2;
+					break;
+				case 2: // 50%
+					v = v >> 1;
+					break;
+				case 3: // 75%
+					v = (v >> 1) + (v >> 2);
+					break;
+				}
+
+				audio_frame[i * 2 + 1] = audio_frame[i * 2] = v;
+			}
+			//i2s_write_bytes(0, audio_frame, 4 * n, portMAX_DELAY);
+			I2S_PlaySound(audio_frame, 4 * n);
+			left -= n;
 		}
-		//i2s_write_bytes(0, audio_frame, 4 * n, portMAX_DELAY);
-		I2S_PlaySound(audio_frame, 4 * n);
-		left -= n;
 	}
 #endif
 }

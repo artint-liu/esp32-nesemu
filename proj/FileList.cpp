@@ -38,6 +38,7 @@ public:
     Artino::MenuKey GetKey() override
     {
         uint32_t time_elapse = 0;
+        m_dwCurrKey = psxReadInput();
         while (1)
         {
             m_dwPrevKey = m_dwCurrKey;
@@ -89,17 +90,19 @@ public:
             LCD_Fill(xy_pos & 0xffff, y, 320, y + 16, clrBackground);
         }
     }
-
-    //void OnEndDrawItem() override
-    //{
-    //}
 };
 
-size_t GetFileList(std::vector<std::string>& list)
+
+
+size_t GetFileList(const char* rootdir, std::vector<std::string>& list)
 {
     WIN32_FIND_DATA wfd = { 0 };
     WCHAR buffer[MAX_PATH];
+    WCHAR rootdirW[MAX_PATH];
+    MultiByteToWideChar(CP_UTF8, 0, rootdir, -1, rootdirW, MAX_PATH);
+
     GetCurrentDirectory(MAX_PATH, buffer);
+    PathCombine(buffer, buffer, rootdirW);
     PathCombine(buffer, buffer, L"*");
 
     HANDLE hFind = FindFirstFile(buffer, &wfd);
@@ -110,18 +113,25 @@ size_t GetFileList(std::vector<std::string>& list)
         {
             std::wstring strExtension = PathFindExtension(wfd.cFileName);
             std::transform(strExtension.begin(), strExtension.end(), strExtension.begin(), ::tolower);
-            if (strExtension != L".nes")
+            if (lstrcmpW(wfd.cFileName, L".") == 0)
             {
                 continue;
             }
+            else if (strExtension != L".nes" && (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
+            {
+                continue;
+            }
+
+
             
             char strFilenameUtf8[MAX_PATH];
             WideCharToMultiByte(CP_UTF8, 0, wfd.cFileName, -1, strFilenameUtf8, sizeof(strFilenameUtf8), nullptr, nullptr);
             list.push_back(strFilenameUtf8);
-            //if (list.size() >= 3) // test
-            //{
-            //    break;
-            //}
+            if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            {
+                list.back().insert(0, "<");
+                list.back().push_back('>');
+            }
         } while (FindNextFile(hFind, &wfd));
         FindClose(hFind);
     }
@@ -133,8 +143,14 @@ const unsigned char* OSDReadFile(const char* szFilename)
 {
     //char strFileAnsi[MAX_PATH];
     WCHAR szFileWide[MAX_PATH];
+    WCHAR buffer[MAX_PATH];
+    GetCurrentDirectory(MAX_PATH, buffer);
+
     int len = MultiByteToWideChar(CP_UTF8, 0, szFilename, strlen(szFilename), szFileWide, sizeof(szFileWide));
     szFileWide[len] = L'\0';
+
+    PathCombine(szFileWide, buffer, szFileWide);
+
     //WideCharToMultiByte(CP_, 0, wfd.cFileName, -1, buffer, sizeof(buffer) / sizeof(buffer[0]), nullptr, nullptr);
 
     std::fstream file(szFileWide, std::ios::in | std::ios::binary);
@@ -152,16 +168,71 @@ const unsigned char* OSDReadFile(const char* szFilename)
     return reinterpret_cast<unsigned char*>(pData);
 }
 
+std::string& CombinPath(std::string& strDir, const std::string& strFile)
+{
+    if (strDir.back() != '/')
+    {
+        strDir.push_back('/');
+    }
+    strDir += strFile;
+    return strDir;
+}
+
+std::string& RemoveLastDir(std::string& strDir)
+{
+    size_t pos = strDir.rfind('/');
+    if (pos != std::string::npos)
+    {
+        if (pos > 0)
+        {
+            strDir = strDir.substr(0, pos);
+        }
+        else
+        {
+            strDir = "/";
+        }
+    }
+    return strDir;
+}
+
 std::string& BrowseFile(std::string& strFilepath)
 {
     Artino::RECT rect = { 0, 0, SCREEN_W, SCREEN_H };
-    std::string str = "sdkals skodo";
-    std::vector<std::string> filelist;
-    GetFileList(filelist);
-    Menu menu(&filelist.front(), filelist.size(), &rect);
-    int select = menu.Loop();
-    LCD_Fill(0, 0, SCREEN_W, SCREEN_H, 0);
-    strFilepath = filelist[select];
+    std::string strDir = "/";
+    const char8_t* szLoading = u8"文件列表读取中";
+
+    while (true)
+    {
+        //delay(100);
+        std::vector<std::string> filelist;
+        GetFileList(strDir.c_str(), filelist);
+        LCD_Fill(0, 0, SCREEN_W, SCREEN_H, 0);
+        delay(10); // 不延时显示不完整
+
+        Menu menu(&filelist.front(), filelist.size(), &rect);
+        int select = menu.Loop();
+        LCD_Fill(0, 0, SCREEN_W, SCREEN_H, 0);
+        strFilepath = filelist[select];
+        if (strFilepath == "<..>")
+        {
+            RemoveLastDir(strDir);
+        }
+        else if (strFilepath.front() == '<')
+        {
+            strFilepath.erase(strFilepath.begin());
+            strFilepath.erase(strFilepath.end() - 1);
+            CombinPath(strDir, strFilepath);
+        }
+        else
+        {
+            CombinPath(strDir, strFilepath);
+            break;
+        }
+        LCD_Write(100, 120 - 16, (const char*)szLoading, strlen((const char*)szLoading));
+        //LCD_Flush();
+    }
+
+    strFilepath = strDir;
     return strFilepath;
 }
 

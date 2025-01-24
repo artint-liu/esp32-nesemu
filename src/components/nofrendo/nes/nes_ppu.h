@@ -83,7 +83,8 @@ typedef struct ppu_s
 
    /* hardware registers */
    uint8 ctrl0, ctrl1, stat, oam_addr;
-   uint32 vaddr, vaddr_latch;
+   uint32 vaddr; // [0..4]:x_tile, [5..11]:y_tile, [12..14]:offset in y tile
+   uint32 vaddr_latch;
    int tile_xofs, flipflop;
    int vaddr_inc;
    uint32 tile_nametab;

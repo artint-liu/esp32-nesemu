@@ -27,7 +27,7 @@
 //#endif
 
 void LCD_Init();
-void LCD_Display(const uint16_t x, const uint16_t y, const uint16_t width, const uint16_t height, const uint8_t *data);
+void LCD_Display(int16_t x, int16_t y, uint16_t width, uint16_t height, const uint8_t *data);
 void LCD_SetTextColor(uint16_t c, uint16_t bk);
 uint32_t LCD_Write(int x, int y, const char* text, size_t len);
 void LCD_WriteASCII(int x, int y, const char* text, size_t len);
