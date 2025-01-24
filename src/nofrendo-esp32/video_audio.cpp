@@ -118,7 +118,7 @@ static void do_audio_frame() {
 			//16 bit mono -> 32-bit (16 bit r+l)
 
 			for (int i = n - 1; i >= 0; i--) {
-				uint16_t v = audio_frame[i];
+				int16_t v = static_cast<int16_t>(audio_frame[i]);
 				switch (volume)
 				{
 				case 1: // 25%
@@ -132,7 +132,7 @@ static void do_audio_frame() {
 					break;
 				}
 
-				audio_frame[i * 2 + 1] = audio_frame[i * 2] = v;
+				audio_frame[i * 2 + 1] = audio_frame[i * 2] = static_cast<uint16_t>(v);
 			}
 			//i2s_write_bytes(0, audio_frame, 4 * n, portMAX_DELAY);
 			I2S_PlaySound(audio_frame, 4 * n);
