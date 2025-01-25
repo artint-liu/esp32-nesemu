@@ -51,7 +51,13 @@ void osd_fullname(char *fullname, const char *shortname)
 /* This gives filenames for storage of saves */
 char *osd_newextension(char *string, const char *ext)
 {
-   return string;
+    int l = strlen(string);
+    while (l && string[l] != '.') {
+        l--;
+    }
+    if (l) string[l] = 0;
+    strcat(string, ext);
+    return string;
 }
 
 /* This gives filenames for storage of PCX snapshots */

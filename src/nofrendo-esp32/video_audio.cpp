@@ -364,10 +364,12 @@ void osd_getinput(void)
             0,					  // 9
             0,					  // 10
             0,					  // 11
-            event_soft_reset,	  // 12
+            //event_soft_reset,	  // 12
+			event_state_save,     // 12
             event_joypad1_a,	  // 13
             event_joypad1_b,	  // 14
-            event_hard_reset	  // 15
+			//event_hard_reset	  // 15
+			event_state_load	  // 15
     };
 
     static int oldb = 0xffff;

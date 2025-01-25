@@ -449,6 +449,7 @@ rominfo_t *rom_load(const char *filename)
       return NULL;
 
    memset(rominfo, 0, sizeof(rominfo_t));
+   strncpy(rominfo->filename, filename, PATH_MAX);
 
    /* Get the header and stick it into rominfo struct */
 	if (rom_getheader(&rom, rominfo))

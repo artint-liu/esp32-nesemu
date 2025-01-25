@@ -142,18 +142,18 @@ size_t GetFileList(const char* rootdir, std::vector<std::string>& list)
 const unsigned char* OSDReadFile(const char* szFilename)
 {
     //char strFileAnsi[MAX_PATH];
-    WCHAR szFileWide[MAX_PATH];
-    WCHAR buffer[MAX_PATH];
-    GetCurrentDirectory(MAX_PATH, buffer);
+    CHAR szFullPath[MAX_PATH];
+    CHAR buffer[MAX_PATH];
+    GetCurrentDirectoryA(MAX_PATH, buffer);
 
-    int len = MultiByteToWideChar(CP_UTF8, 0, szFilename, strlen(szFilename), szFileWide, sizeof(szFileWide));
-    szFileWide[len] = L'\0';
+    //int len = MultiByteToWideChar(CP_UTF8, 0, szFilename, strlen(szFilename), szFileWide, sizeof(szFileWide));
+    //szFileWide[len] = L'\0';
 
-    PathCombine(szFileWide, buffer, szFileWide);
+    PathCombineA(szFullPath, buffer, szFilename);
 
     //WideCharToMultiByte(CP_, 0, wfd.cFileName, -1, buffer, sizeof(buffer) / sizeof(buffer[0]), nullptr, nullptr);
 
-    std::fstream file(szFileWide, std::ios::in | std::ios::binary);
+    std::fstream file(szFullPath, std::ios::in | std::ios::binary);
     //file.open(strFile.c_str(), std::ios_base::in);
     file.seekg(0, std::ios::end);
     size_t size = file.tellg();
@@ -195,6 +195,16 @@ std::string& RemoveLastDir(std::string& strDir)
     return strDir;
 }
 
+std::string Utf8ToAnsi(const std::string& strUtf8)
+{
+    const size_t buffer_size = 1024;
+    WCHAR bufferW[buffer_size] = { 0 };
+    CHAR buffer[buffer_size] = {0};
+    MultiByteToWideChar(CP_UTF8, 0, strUtf8.c_str(), strUtf8.size(), bufferW, buffer_size);
+    WideCharToMultiByte(CP_ACP, 0, bufferW, buffer_size, buffer, buffer_size, NULL, FALSE);
+    return buffer;
+}
+
 std::string& BrowseFile(std::string& strFilepath)
 {
     Artino::RECT rect = { 0, 0, SCREEN_W, SCREEN_H };
@@ -232,7 +242,7 @@ std::string& BrowseFile(std::string& strFilepath)
         //LCD_Flush();
     }
 
-    strFilepath = strDir;
+    strFilepath = Utf8ToAnsi(strDir);
     return strFilepath;
 }
 

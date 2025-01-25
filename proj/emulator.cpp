@@ -141,8 +141,8 @@ void KeyCallback(int key, int action)
         case 'S':       g_dwKeyPressed |= (1 << KEYSHIFT_B); break;
         case 'E':       g_dwKeyPressed |= (1 << KEYSHIFT_SELECT); break;
         case 'R':       g_dwKeyPressed |= (1 << KEYSHIFT_START); break;
-        case 'O':       g_dwKeyPressed |= (1 << KEYSHIFT_SOFT_RESET); break;
-        case 'P':       g_dwKeyPressed |= (1 << KEYSHIFT_HARD_RESET); break;
+        case 'O':       g_dwKeyPressed |= (1 << KEYSHIFT_SAVE); break;
+        case 'P':       g_dwKeyPressed |= (1 << KEYSHIFT_LOAD); break;
         }
     }
     else if (action == WM_KEYUP)
@@ -157,8 +157,8 @@ void KeyCallback(int key, int action)
         case 'S':       g_dwKeyPressed &= (~(1 << KEYSHIFT_B)); break;
         case 'E':       g_dwKeyPressed &= (~(1 << KEYSHIFT_SELECT)); break;
         case 'R':       g_dwKeyPressed &= (~(1 << KEYSHIFT_START)); break;
-        case 'O':       g_dwKeyPressed &= (~(1 << KEYSHIFT_SOFT_RESET)); break;
-        case 'P':       g_dwKeyPressed &= (~(1 << KEYSHIFT_HARD_RESET)); break;
+        case 'O':       g_dwKeyPressed &= (~(1 << KEYSHIFT_SAVE)); break;
+        case 'P':       g_dwKeyPressed &= (~(1 << KEYSHIFT_LOAD)); break;
         }
     }
 }

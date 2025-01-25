@@ -9,9 +9,10 @@
 #define KEYSHIFT_START          3
 #define KEYSHIFT_A              13
 #define KEYSHIFT_B              14
-#define KEYSHIFT_SOFT_RESET	    12
-#define KEYSHIFT_HARD_RESET	    15
-
+//#define KEYSHIFT_SOFT_RESET	    12
+//#define KEYSHIFT_HARD_RESET	    15
+#define KEYSHIFT_SAVE           12
+#define KEYSHIFT_LOAD           15
 
 #define KEYMASK_UP	            (1 << KEYSHIFT_UP        )
 #define KEYMASK_RIGHT           (1 << KEYSHIFT_RIGHT     )
@@ -21,8 +22,11 @@
 #define KEYMASK_START           (1 << KEYSHIFT_START     )
 #define KEYMASK_B               (1 << KEYSHIFT_A         )
 #define KEYMASK_A               (1 << KEYSHIFT_B         )
-#define KEYMASK_SOFT_RESET	    (1 << KEYSHIFT_SOFT_RESET)
-#define KEYMASK_HARD_RESET	    (1 << KEYSHIFT_HARD_RESET)
+//#define KEYMASK_SOFT_RESET	    (1 << KEYSHIFT_SOFT_RESET)
+//#define KEYMASK_HARD_RESET	    (1 << KEYSHIFT_HARD_RESET)
+
+#define KEYMASK_SAVE            (1 << KEYSHIFT_SAVE)
+#define KEYMASK_LOAD            (1 << KEYSHIFT_LOAD)
 
 int psxReadInput();
 void psxcontrollerInit();
