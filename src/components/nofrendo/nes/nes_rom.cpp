@@ -41,6 +41,7 @@
 #endif
 
 extern const unsigned char *osd_getromdata(const char* filename);
+extern void osd_unloadromdata();
 
 /* Max length for displayed filename */
 #define  ROM_DISP_MAXLEN   20
@@ -515,6 +516,7 @@ void rom_free(rominfo_t **rominfo)
       free((*rominfo)->vrom);
    if ((*rominfo)->vram)
       free((*rominfo)->vram);
+   // osd_unloadromdata();
 
    free(*rominfo);
 

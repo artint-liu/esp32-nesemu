@@ -37,7 +37,7 @@ typedef struct rect_s
 
 typedef struct rgb_s
 {
-   int r, g, b;
+   uint8 r, g, b;
 } rgb_t;
 
 typedef struct bitmap_s

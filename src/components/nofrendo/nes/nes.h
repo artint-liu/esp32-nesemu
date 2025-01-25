@@ -115,6 +115,8 @@ extern void nes_reset(int reset_type);
 extern void nes_poweroff(void);
 extern void nes_togglepause(void);
 
+//extern void ppu_scanline_blit(uint8_t *bmp, int scanline, bool draw_flag);
+
 #endif /* _NES_H_ */
 
 /*

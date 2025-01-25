@@ -36,13 +36,25 @@
 #include <stdlib.h>
 #endif
 
+//banks is in 16K units
 #define  MMC_8KROM         (mmc.cart->rom_banks * 2)
 #define  MMC_16KROM        (mmc.cart->rom_banks)
 #define  MMC_32KROM        (mmc.cart->rom_banks / 2)
+
+//banks is in 8K units
 #define  MMC_8KVROM        (mmc.cart->vrom_banks)
 #define  MMC_4KVROM        (mmc.cart->vrom_banks * 2)
 #define  MMC_2KVROM        (mmc.cart->vrom_banks * 4)
 #define  MMC_1KVROM        (mmc.cart->vrom_banks * 8)
+
+//banks is in 8k
+#define  MMC_32KSRAM        (mmc.cart->sram_banks / 4)
+#define  MMC_16KSRAM        (mmc.cart->sram_banks / 2)
+#define  MMC_8KSRAM         (mmc.cart->sram_banks)
+#define  MMC_4KSRAM         (mmc.cart->sram_banks * 2)
+#define  MMC_2KSRAM         (mmc.cart->sram_banks * 4)
+#define  MMC_1KSRAM         (mmc.cart->sram_banks * 8)
+
 
 #define  MMC_LAST8KROM     (MMC_8KROM - 1)
 #define  MMC_LAST16KROM    (MMC_16KROM - 1)
@@ -108,6 +120,30 @@ void mmc_bankvrom(int size, uint32 address, int bank)
    }
 }
 
+void mmc_bankvram(int size, uint32 address, int bank) {
+   switch (size)
+   {
+   case 1:
+      ppu_setpage(1, address >> 10, &mmc.cart->sram[(bank % MMC_1KSRAM) << 10] - address);
+      break;
+
+   case 2:
+      ppu_setpage(2, address >> 10, &mmc.cart->sram[(bank % MMC_2KSRAM) << 11] - address);
+      break;
+
+   case 4:
+      ppu_setpage(4, address >> 10, &mmc.cart->sram[(bank % MMC_4KSRAM) << 12] - address);
+      break;
+
+   case 8:
+      ppu_setpage(8, 0, &mmc.cart->sram[(bank % MMC_8KSRAM) << 13]);
+      break;
+
+   default:
+      log_printf("invalid VROM bank size %d\n", size);
+   }
+}
+
 /* ROM bankswitching */
 void mmc_bankrom(int size, uint32 address, int bank)
 {
@@ -161,6 +197,54 @@ void mmc_bankrom(int size, uint32 address, int bank)
 
    nes6502_setcontext(&mmc_cpu);
 }
+
+/* RAM bankswitching */
+void mmc_bankram(int size, uint32 address, int bank)
+{
+   nes6502_context mmc_cpu;
+
+   nes6502_getcontext(&mmc_cpu); 
+
+   switch (size)
+   {
+   case 8:
+      {
+         int page = address >> NES6502_BANKSHIFT;
+         mmc_cpu.mem_page[page] = &mmc.cart->sram[(bank % MMC_8KSRAM) << 13];
+         mmc_cpu.mem_page[page + 1] = mmc_cpu.mem_page[page] + 0x1000;
+      }
+      break;
+
+   case 16:
+      {
+         int page = address >> NES6502_BANKSHIFT;
+         mmc_cpu.mem_page[page] = &mmc.cart->sram[(bank % MMC_16KSRAM) << 14];
+         mmc_cpu.mem_page[page + 1] = mmc_cpu.mem_page[page] + 0x1000;
+         mmc_cpu.mem_page[page + 2] = mmc_cpu.mem_page[page] + 0x2000;
+         mmc_cpu.mem_page[page + 3] = mmc_cpu.mem_page[page] + 0x3000;
+      }
+      break;
+
+   case 32:
+      mmc_cpu.mem_page[8] = &mmc.cart->sram[(bank % MMC_32KSRAM) << 15];
+      mmc_cpu.mem_page[9] = mmc_cpu.mem_page[8] + 0x1000;
+      mmc_cpu.mem_page[10] = mmc_cpu.mem_page[8] + 0x2000;
+      mmc_cpu.mem_page[11] = mmc_cpu.mem_page[8] + 0x3000;
+      mmc_cpu.mem_page[12] = mmc_cpu.mem_page[8] + 0x4000;
+      mmc_cpu.mem_page[13] = mmc_cpu.mem_page[8] + 0x5000;
+      mmc_cpu.mem_page[14] = mmc_cpu.mem_page[8] + 0x6000;
+      mmc_cpu.mem_page[15] = mmc_cpu.mem_page[8] + 0x7000;
+      break;
+
+   default:
+      log_printf("invalid SRAM bank size %d\n", size);
+      break;
+   }
+
+   nes6502_setcontext(&mmc_cpu);
+}
+
+
 
 /* Check to see if this mapper is supported */
 bool mmc_peek(int map_num)

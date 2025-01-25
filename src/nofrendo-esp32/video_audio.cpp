@@ -76,6 +76,12 @@ int osd_installtimer(int frequency, void *func, int funcsize, void *counter, int
    return 0;
 }
 
+//int osd_nofrendo_ticks(void) {
+//	return eadk_timing_millis() / (1000 / timerfreq);
+//}
+
+void osd_unloadromdata() {
+}
 
 /*
 ** Audio
@@ -313,6 +319,19 @@ static void custom_blit(bitmap_t *bmp, int num_dirties, rect_t *dirty_rects) {
 	useQueue = true;
 	xQueueSend(vidQueue, &bmp, 0);
 	do_audio_frame();
+}
+
+void ppu_scanline_blit(uint8_t* bmp, int scanline, bool draw_flag) {
+	//uint16_t line[NES_SCREEN_WIDTH];
+	//const int xoffset = (EADK_SCREEN_WIDTH - NES_SCREEN_WIDTH) / 2;
+	//const int yoffset = (EADK_SCREEN_HEIGHT - NES_SCREEN_HEIGHT) / 2;
+	//bmp += 8;
+	//if (draw_flag && !(scanline < 0 || scanline >= EADK_SCREEN_HEIGHT)) {
+	//	for (int x = 0; x < NES_SCREEN_WIDTH; x++) {
+	//		line[x] = myPalette[*bmp++];
+	//	}
+	//	eadk_display_push_rect((eadk_rect_t) { xoffset, scanline + yoffset, NES_SCREEN_WIDTH, 1 }, line);
+	//}
 }
 
 
