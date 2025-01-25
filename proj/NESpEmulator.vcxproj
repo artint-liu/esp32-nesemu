@@ -216,6 +216,7 @@
     <ClCompile Include="..\src\components\nofrendo\mappers\map064.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map065.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map066.cpp" />
+    <ClCompile Include="..\src\components\nofrendo\mappers\map069.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map070.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map073.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map075.cpp" />
@@ -227,6 +228,7 @@
     <ClCompile Include="..\src\components\nofrendo\mappers\map094.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map099.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map160.cpp" />
+    <ClCompile Include="..\src\components\nofrendo\mappers\map225.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map229.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\map231.cpp" />
     <ClCompile Include="..\src\components\nofrendo\mappers\mapvrc.cpp" />

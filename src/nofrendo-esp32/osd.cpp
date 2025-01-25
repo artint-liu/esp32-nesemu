@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef _WIN32
+#ifdef _WIN32
+#include <shlwapi.h>
+#else
 #include <sys/time.h>
 #endif
 #include <sys/stat.h>
@@ -57,6 +59,11 @@ char *osd_newextension(char *string, const char *ext)
     }
     if (l) string[l] = 0;
     strcat(string, ext);
+#ifdef _WIN32
+    char buffer[PATH_MAX];
+    GetCurrentDirectoryA(PATH_MAX, buffer);
+    PathCombineA(string, buffer, string);
+#endif
     return string;
 }
 
@@ -65,3 +72,43 @@ int osd_makesnapname(char *filename, int len)
 {
    return -1;
 }
+
+#ifdef _WIN32
+
+OSDFile* OSDFile::fopen(char const* _FileName, char const* _Mode)
+{
+    Win32File* pFile = new Win32File;
+    pFile->fp = ::fopen(_FileName, _Mode);
+    return pFile;
+}
+
+
+int Win32File::fclose()
+{
+    int result = ::fclose(fp);
+    delete this;
+    return result;
+}
+
+size_t  Win32File::fread(void* _Buffer, size_t _ElementSize, size_t _ElementCount)
+{
+    size_t result = ::fread(_Buffer, _ElementSize, _ElementCount, fp);
+    return result;
+}
+
+size_t Win32File::fwrite(void const* _Buffer, size_t _ElementSize, size_t _ElementCount)
+{
+    return ::fwrite(_Buffer, _ElementSize, _ElementCount, fp);
+}
+
+long Win32File::ftell()
+{
+    return ::ftell(fp);
+}
+
+int Win32File::fseek(long _Offset, int _Origin)
+{
+    return ::fseek(fp, _Offset, _Origin);
+}
+
+#endif // #ifdef _WIN32

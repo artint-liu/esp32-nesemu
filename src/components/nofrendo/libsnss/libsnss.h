@@ -313,9 +313,10 @@ typedef struct _SnssSoundBlock
 /* SNSS file manipulation functions */
 /**************************************************************************/
 
+class OSDFile;
 typedef struct _SNSS_FILE
 {
-   FILE *fp;
+   OSDFile* fp;
    SNSS_OPEN_MODE mode;
    SnssFileHeader headerBlock;
    SnssBaseBlock baseBlock;

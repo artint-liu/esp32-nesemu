@@ -400,5 +400,11 @@
     <ClCompile Include="FileList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map069.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\components\nofrendo\mappers\map225.cpp">
+      <Filter>src\mappers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

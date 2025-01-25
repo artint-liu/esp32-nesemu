@@ -105,8 +105,30 @@ extern int osd_makesnapname(char *filename, int len);
 
 const unsigned char* OSDReadFile(const char* szFilename);
 
+class OSDFile
+{
+public:
+    static OSDFile* fopen(char const* _FileName, char const* _Mode);
+    virtual int fclose() = 0;
+    virtual size_t  fread(void* _Buffer, size_t _ElementSize, size_t _ElementCount) = 0;
+    virtual size_t fwrite(void const* _Buffer, size_t _ElementSize, size_t _ElementCount) = 0;
+    virtual long ftell() = 0;
+    virtual int fseek(long  _Offset, int   _Origin) = 0;
+};
+
 #ifdef _WIN32
 #define TRACE(x)
+class Win32File : public OSDFile
+{
+    FILE* fp = nullptr;
+public:
+    friend static OSDFile* OSDFile::fopen(char const* _FileName, char const* _Mode);
+    virtual int fclose() override;
+    virtual size_t fread(void* _Buffer, size_t _ElementSize, size_t _ElementCount) override;
+    virtual size_t fwrite(void const* _Buffer, size_t _ElementSize, size_t _ElementCount) override;
+    virtual long ftell() override;
+    virtual int fseek(long  _Offset, int   _Origin) override;
+};
 #else
 extern void MyTrace(const char*);
 #define TRACE(x) MyTrace(x)
